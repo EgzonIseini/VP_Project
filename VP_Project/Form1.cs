@@ -24,12 +24,8 @@ namespace VP_Project
 
         private void button2_Click(object sender, EventArgs e)
         {
+            for(int i=0;i<25;i++)
             MessageBox.Show("Zdravo");
-            MessageBox.Show("Zdravo pak");
-            for (int i =0;i<10;i++)
-            {
-                MessageBox.Show("i pak");
-            }
         }
     }
 }
