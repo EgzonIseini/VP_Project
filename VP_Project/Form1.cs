@@ -17,9 +17,19 @@ namespace VP_Project
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Selamu Aleykum");
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Zdravo");
+            MessageBox.Show("Zdravo pak");
+            for (int i =0;i<10;i++)
+            {
+                MessageBox.Show("i pak");
+            }
         }
     }
 }
