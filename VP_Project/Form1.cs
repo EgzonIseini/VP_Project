@@ -19,7 +19,7 @@ namespace VP_Project
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Shalom Gay Boys");
+            MessageBox.Show("Selamu Aleykum");
         }
     }
 }
