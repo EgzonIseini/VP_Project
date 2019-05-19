@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Balls\Ball.cs" />
+    <Compile Include="Balls\Balls.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Blocks\Row.cs" />
     <Compile Include="Blocks\SquareBlock.cs" />
@@ -84,5 +86,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
