@@ -11,18 +11,23 @@ using System.Windows.Forms;
 
 namespace VP_Project
 {
-    public partial class Form1 : Form
+    public partial class Game : Form
     {
         SquareBlock block;
-        public Form1()
+        public Game()
         {
             InitializeComponent();
             block = new SquareBlock(new Point(10, 10), 100);
             
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
+        private void Game_Paint(object sender, PaintEventArgs e)
+        { 
+            // This is the first line which sets the canvas for painting. Only use this
+            // to initalize the canvas i.e. set color, size etc.
+            e.Graphics.Clear(Color.DimGray);
+
+            // Any other type of drawing goes below this comment.
             block.Draw(e.Graphics);
         }
     }
