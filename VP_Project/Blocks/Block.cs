@@ -21,8 +21,14 @@ namespace VP_Project.Blocks
         /// </remarks>
         public Block(float X, float Y, int HP)
         {
-            this.X = X;
-            this.Y = Y;
+            //Ardian'
+            //this.Y = Y;
+            //this.X = X;
+            //Altered Y and X so they start drawing from the defined constants i.e. actual drawing area size.
+            //Ex: drawing from below the toolbar strip rather than cutting inside.
+            this.Y = Y + Constants.FORM_TOP;
+            this.X = X + Constants.FORM_LEFT;
+
             this.exists = true;
             Color = Color.Red;
             MoveDownLock = false;
