@@ -67,5 +67,15 @@ namespace VP_Project.Blocks
                     blocks.RemoveAt(i--);
             }
         }
+
+        public void MoveRowDown()
+        {
+            foreach (Block block in blocks)
+            {
+                block.Y = block.Y + Constants.BLOCK_MOVE_SPEED;
+            }
+        }
+
+
     }
 }
