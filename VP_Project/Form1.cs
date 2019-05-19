@@ -13,7 +13,7 @@ namespace VP_Project
 {
     public partial class Game : Form
     {
-        Block block;
+        Block block, block2;
         bool clicked;
         public Game()
         {
@@ -21,6 +21,7 @@ namespace VP_Project
             timerDraw.Enabled = true;
             timerDraw.Interval = Constants.TIMER_60_FPS;
             block = new SquareBlock(10, 10, 100);
+            block2 = new SquareBlock(200, 500, 50);
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -35,6 +36,7 @@ namespace VP_Project
 
             // Any other type of drawing goes below this comment.
             block.Draw(e.Graphics);
+            block2.Draw(e.Graphics);
         }
 
         private void timerDraw_Tick(object sender, EventArgs e)
