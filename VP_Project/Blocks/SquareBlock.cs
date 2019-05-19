@@ -9,7 +9,7 @@ namespace VP_Project.Blocks
 {
     public class SquareBlock : Block
     {
-        public SquareBlock(Point Location, int HP) : base(Location, HP)
+        public SquareBlock(float X, float Y, int HP) : base(X, Y, HP)
         {
         }
 
@@ -22,18 +22,21 @@ namespace VP_Project.Blocks
             g.DrawString(HP + "", font, Brushes.Red, rec, stringFormat);
         }
 
+        private void Move()
+        {
+            float dy = Constants.BLOCK_MOVE_SPEED;
+            
+        }
+
         public override void Draw(Graphics g)
         {
             Pen pen = new Pen(Color.Red, Constants.PEN_WIDTH);
-            RectangleF rec = new RectangleF(Location.X, Location.Y, Constants.SQUARE_BLOCK_WIDTH, Constants.SQUARE_BLOCK_HEIGHT);
+            
+            RectangleF rec = new RectangleF(X, Y, Constants.SQUARE_BLOCK_WIDTH, Constants.SQUARE_BLOCK_HEIGHT);
             DrawHP(g, rec);
             g.DrawRectangle(pen, Rectangle.Round(rec));
-            pen.Dispose();
-        }
 
-        public override void Move()
-        {
-            
+            pen.Dispose();
         }
     }
 }

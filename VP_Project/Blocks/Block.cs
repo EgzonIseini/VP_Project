@@ -9,26 +9,33 @@ namespace VP_Project.Blocks
 {
     public abstract class Block
     {
-        public Point Location { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
         public Color Color { get; set; }
         public int HP { get; set; }
-        private bool exists; // whether the block still exists, will be used for drawing later
+        protected bool MoveDownLock;
 
+        private bool exists; // whether the block still exists, will be used for drawing later
         /// <remarks>
         /// Color is determined according to HP
         /// </remarks>
-        public Block(Point Location, int HP)
+        public Block(float X, float Y, int HP)
         {
-            this.Location = Location;
-            this.HP = HP;
+            this.X = X;
+            this.Y = Y;
             this.exists = true;
             Color = Color.Red;
+            MoveDownLock = false;
+            this.HP = HP;
         }
 
         /// <summary>
         /// Method to move the block down
         /// </summary>
-        public abstract void Move();
+        public void MoveDown()
+        {
+            MoveDownLock = true;
+        }
 
         /// <summary>
         /// Method to draw the block
@@ -49,5 +56,4 @@ namespace VP_Project.Blocks
             }
         }
     }
-
 }
