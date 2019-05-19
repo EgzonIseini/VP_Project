@@ -22,6 +22,8 @@ namespace VP_Project
             timerDraw.Interval = Constants.TIMER_60_FPS;
             block = new SquareBlock(10, 10, 100);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             clicked = false;
         }
 
