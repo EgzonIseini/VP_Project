@@ -14,7 +14,6 @@ namespace VP_Project
     public partial class Form1 : Form
     {
         Block block;
-        bool clicked;
         public Form1()
         {
             InitializeComponent();
@@ -22,7 +21,6 @@ namespace VP_Project
             timerDraw.Interval = Constants.TIMER_60_FPS;
             block = new SquareBlock(10, 10, 100);
             this.DoubleBuffered = true;
-            clicked = false;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -33,11 +31,6 @@ namespace VP_Project
         private void timerDraw_Tick(object sender, EventArgs e)
         {
             Invalidate(true);   
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            block.MoveDown();
         }
     }
 }
