@@ -17,6 +17,11 @@ namespace VP_Project
         public static readonly Random RANDOM = new Random();
         public static readonly int TIMER_60_FPS = 16; //unit is ms
         public static readonly int TIMER_30_FPS = 32;
-        public static readonly int BLOCK_MOVE_SPEED = 5;
+        public static readonly int BLOCK_MOVE_SPEED;
+
+        public static readonly int FORM_TOP = 30;
+        public static readonly int FORM_BOTTOM = 620;
+        public static readonly int FORM_LEFT = 0;
+        public static readonly int FORM_RIGHT = 420;
     }
 }
