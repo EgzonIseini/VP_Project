@@ -13,17 +13,31 @@ namespace VP_Project
 {
     public partial class Form1 : Form
     {
-        SquareBlock block;
+        Block block;
+        bool clicked;
         public Form1()
         {
             InitializeComponent();
-            block = new SquareBlock(new Point(10, 10), 100);
-            
+            timerDraw.Enabled = true;
+            timerDraw.Interval = Constants.TIMER_60_FPS;
+            block = new SquareBlock(10, 10, 100);
+            this.DoubleBuffered = true;
+            clicked = false;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
             block.Draw(e.Graphics);
+        }
+
+        private void timerDraw_Tick(object sender, EventArgs e)
+        {
+            Invalidate(true);   
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            block.MoveDown();
         }
     }
 }
