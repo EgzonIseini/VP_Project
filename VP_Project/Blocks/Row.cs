@@ -11,7 +11,9 @@ namespace VP_Project.Blocks
     {
         private List<Block> blocks;
         private static int RowNum = 0;
-
+        /// <summary>
+        /// Genertes new Row in Game
+        /// </summary>
         public Row()
         {
             blocks = new List<Block>();
@@ -19,18 +21,25 @@ namespace VP_Project.Blocks
             GenerateRow();
         }
         
+        /// <summary>
+        /// Internal method to generate row in random fashion
+        /// </summary>
         private void GenerateRow()
         {
             for (int i = 0; i < Constants.NUM_OF_BLOCKS_IN_ROW; i++)
             {
                 int current = Constants.RANDOM.Next(1, 10);
-                if (current <= Constants.PROBABILITY_OF_BLOCK)
+               
+                if (current < Constants.PROBABILITY_OF_BLOCK)
                 {
-                    blocks.Add(new SquareBlock(i * Constants.SQUARE_BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+                    blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
                 }
             }
         }
 
+        /// <summary>
+        /// Draws the Blocks
+        /// </summary>
         public void DrawBlocks(Graphics g)
         {
             foreach (Block b in blocks)
@@ -39,5 +48,24 @@ namespace VP_Project.Blocks
             }
         }
 
+        /// <summary>
+        /// Checks if any collision has happened and takes action accordingly
+        /// </summary>
+        /// <param name="X">X-coordinate of ball</param>
+        /// <param name="Y">Y-coordinate of ball</param>
+        /// <param name="BallPower">Power of Ball, default value 1</param>
+        public void CollisionsTest(float X, float Y, int BallPower = 1)
+        {
+            foreach (Block block in blocks)
+            {
+                block.CollisionTest(X, Y, BallPower);
+            }
+
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                if (!blocks[i].exists)
+                    blocks.RemoveAt(i--);
+            }
+        }
     }
 }

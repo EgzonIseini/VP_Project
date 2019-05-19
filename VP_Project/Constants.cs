@@ -11,19 +11,22 @@ namespace VP_Project
     /// </summary>
     public class Constants
     {
-        public static readonly int SQUARE_BLOCK_WIDTH = 40;
-        public static readonly int SQUARE_BLOCK_HEIGHT = 40;
+        public static readonly int BLOCK_WIDTH = 40;
+        public static readonly int BLOCK_HEIGHT = 40;
         public static readonly float PEN_WIDTH = 4.5F;
         public static readonly Random RANDOM = new Random();
         public static readonly int TIMER_60_FPS = 16; //unit is ms
         public static readonly int TIMER_30_FPS = 32;
         public static readonly int BLOCK_MOVE_SPEED = 1;
         public static readonly int PROBABILITY_OF_BLOCK = 7; // determines the probability of a block being generated in a row
-        public static readonly int NUM_OF_BLOCKS_IN_ROW = 5;
+        public static readonly int NUM_OF_BLOCKS_IN_ROW = 10;
+        public static readonly float BALL_RADIUS = 3F; // dummy value for calcuation purposes, change it accordingly
 
         public static readonly int FORM_TOP = 30;
         public static readonly int FORM_BOTTOM = 620;
         public static readonly int FORM_LEFT = 0;
         public static readonly int FORM_RIGHT = 420;
+
+
     }
 }

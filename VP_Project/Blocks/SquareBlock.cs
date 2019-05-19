@@ -25,7 +25,7 @@ namespace VP_Project.Blocks
 
         private void DrawBlock(Pen pen, Graphics g)
         {
-            RectangleF rec = new RectangleF(this.X, this.Y, Constants.SQUARE_BLOCK_WIDTH, Constants.SQUARE_BLOCK_HEIGHT);
+            RectangleF rec = new RectangleF(this.X, this.Y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
             DrawHP(g, rec);
             g.DrawRectangle(pen, Rectangle.Round(rec));
         }
@@ -35,6 +35,18 @@ namespace VP_Project.Blocks
             Pen pen = new Pen(Color.Red, Constants.PEN_WIDTH);
             DrawBlock(pen, g);
             pen.Dispose();
+        }
+
+        public override void CollisionTest(float X, float Y, int BallPower = 1)
+        {
+            if ((Y >= this.Y && Y <= this.Y + Constants.BLOCK_HEIGHT) &&
+               ((X + Constants.BALL_RADIUS >= this.X) || (X - Constants.BALL_RADIUS <= this.X)))
+            {
+                WasHit(BallPower);
+            }
+            else if ((X >= this.X && X <= this.X + Constants.BLOCK_WIDTH) &&
+                    ((Y + Constants.BALL_RADIUS >= this.Y) || (Y - Constants.BALL_RADIUS <= this.Y)))
+                WasHit(BallPower);
         }
     }
 }

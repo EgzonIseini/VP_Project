@@ -13,9 +13,7 @@ namespace VP_Project.Blocks
         public float Y { get; set; }
         public Color Color { get; set; }
         public int HP { get; set; }
-        protected bool MoveDownLock;
-
-        private bool exists; // whether the block still exists, will be used for drawing later
+        public bool exists; // whether the block still exists, will be used for drawing later
         /// <remarks>
         /// Color is determined according to HP
         /// </remarks>
@@ -25,7 +23,6 @@ namespace VP_Project.Blocks
             this.X = X;
             this.exists = true;
             Color = Color.Red;
-            MoveDownLock = false;
             this.HP = HP;
         }
 
@@ -34,13 +31,33 @@ namespace VP_Project.Blocks
         /// </summary>
         public void MoveDown()
         {
-            MoveDownLock = true;
+            
         }
 
         /// <summary>
         /// Method to draw the block
         /// </summary>
         public abstract void Draw(Graphics g);
+
+        /// <summary>
+        /// Method to check whether there is collision with this block
+        /// </summary>
+        /// <param name="X">X-Coordinate of ball</param>
+        /// <param name="Y">Y-Coordinate of ball</param>
+        /// <param name="BallPower">Power of the Ball, default 1</param>
+        public abstract void CollisionTest(float X, float Y, int BallPower = 1);
+
+        /// <summary>
+        /// Method to find the distance between ball and block
+        /// </summary>
+        /// <param name="X">X-Coordinate of ball</param>
+        /// <param name="Y">Y-Coordinate of ball</param>
+        /// <returns>Distance as float</returns>
+        protected float GetDistance(float X, float Y)
+        {
+            return (float)Math.Sqrt((this.X - X) * (this.X - X) + (this.Y - Y) * (this.Y - Y));
+
+        }
 
         /// <summary>
         /// Method invoked when block is hit
