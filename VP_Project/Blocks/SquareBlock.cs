@@ -25,7 +25,7 @@ namespace VP_Project.Blocks
 
         private void DrawBlock(Pen pen, Graphics g)
         {
-            RectangleF rec = new RectangleF(X, Y, Constants.SQUARE_BLOCK_WIDTH, Constants.SQUARE_BLOCK_HEIGHT);
+            RectangleF rec = new RectangleF(this.X, this.Y, Constants.SQUARE_BLOCK_WIDTH, Constants.SQUARE_BLOCK_HEIGHT);
             DrawHP(g, rec);
             g.DrawRectangle(pen, Rectangle.Round(rec));
         }

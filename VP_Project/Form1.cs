@@ -13,19 +13,16 @@ namespace VP_Project
 {
     public partial class Game : Form
     {
-        Block block, block2;
-        bool clicked;
+        Row row;
         public Game()
         {
             InitializeComponent();
             timerDraw.Enabled = true;
             timerDraw.Interval = Constants.TIMER_60_FPS;
-            block = new SquareBlock(10, 10, 100);
-            block2 = new SquareBlock(200, 500, 50);
+            row = new Row();
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            clicked = false;
         }
 
         private void Game_Paint(object sender, PaintEventArgs e)
@@ -35,8 +32,7 @@ namespace VP_Project
             e.Graphics.Clear(Color.DimGray);
 
             // Any other type of drawing goes below this comment.
-            block.Draw(e.Graphics);
-            block2.Draw(e.Graphics);
+            row.DrawBlocks(e.Graphics);
         }
 
         private void timerDraw_Tick(object sender, EventArgs e)
@@ -44,9 +40,5 @@ namespace VP_Project
             Invalidate(true);   
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            block.MoveDown();
-        }
     }
 }

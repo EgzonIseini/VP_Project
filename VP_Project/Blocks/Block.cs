@@ -21,14 +21,8 @@ namespace VP_Project.Blocks
         /// </remarks>
         public Block(float X, float Y, int HP)
         {
-            //Ardian'
-            //this.Y = Y;
-            //this.X = X;
-            //Altered Y and X so they start drawing from the defined constants i.e. actual drawing area size.
-            //Ex: drawing from below the toolbar strip rather than cutting inside.
-            this.Y = Y + Constants.FORM_TOP;
-            this.X = X + Constants.FORM_LEFT;
-
+            this.Y = Y;
+            this.X = X;
             this.exists = true;
             Color = Color.Red;
             MoveDownLock = false;
@@ -53,7 +47,7 @@ namespace VP_Project.Blocks
         /// It should decrease the HP by the amount provided as arg
         /// Default val is 1
         /// </summary>
-        public void wasHit(int amount = 1)
+        public void WasHit(int amount = 1)
         {
             HP -= amount;
             if (HP <= 0)
