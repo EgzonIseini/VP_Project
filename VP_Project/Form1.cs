@@ -15,7 +15,7 @@ namespace VP_Project
     {
         Block block;
         bool clicked;
-        public Form1()
+        public Game()
         {
             InitializeComponent();
             timerDraw.Enabled = true;
