@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,17 @@ namespace VP_Project
         public static readonly int FORM_LEFT = 0;
         public static readonly int FORM_RIGHT = 420;
 
+		public static readonly int POWERUP_X = 15;
+		public static readonly int POWERUP_Y = 15;
+		public static readonly int POWERUP_RADIUS = 15;
 
-    }
+		public static Image[] powerUpImages =
+		{
+			null,
+			Properties.Resources.coin,
+			Properties.Resources.doubledmg,
+			Properties.Resources.doubleball,
+			Properties.Resources.finki
+		};
+	}
 }

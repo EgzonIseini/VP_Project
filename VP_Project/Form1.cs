@@ -8,12 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using VP_Project.Blocks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace VP_Project
 {
     public partial class Game : Form
     {
         List<Row> rows;
+
+		// powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
+		// Can't have more than one powerup at a time. Initialized originally to 0.
+		private int powerupType;
+
         public Game()
         {
             InitializeComponent();
@@ -21,6 +27,7 @@ namespace VP_Project
             timerDraw.Interval = Constants.TIMER_60_FPS;
             rows = new List<Row>();
             rows.Add(new Row());
+			this.powerupType = 0;
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -58,5 +65,23 @@ namespace VP_Project
         {
             Invalidate(true);
         }
-    }
+
+		private void Game_MouseClick(object sender, MouseEventArgs e)
+		{
+			Debug.WriteLine("Clicked at X: {0}, Y: {1}", e.X, e.Y);
+			foreach(Row row in rows)
+			{
+				row.CollisionsTest(e.X, e.Y);
+			}
+
+			powerupType = PowerUp.currentPowerup;
+
+			Invalidate(true);
+
+			if (powerupType != 0)
+			{
+				MessageBox.Show(string.Format("Picked up a powerup of type: {0}", powerupType.ToString()));
+			}
+		}
+	}
 }

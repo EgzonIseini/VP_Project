@@ -32,8 +32,15 @@ namespace VP_Project.Blocks
                
                 if (current < Constants.PROBABILITY_OF_BLOCK)
                 {
-                    blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
-                }
+					//Delete this, only for testing...
+					int randomPowerUp = Constants.RANDOM.Next(0, 101);
+					int type = Constants.RANDOM.Next(1, 5);
+
+					if(randomPowerUp % 2 == 0) blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+					else blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
+
+					//blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+				}
             }
         }
 
