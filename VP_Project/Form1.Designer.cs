@@ -39,6 +39,7 @@
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusStrip_ScoreLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timerDraw = new System.Windows.Forms.Timer(this.components);
+			this.button_FastForward = new System.Windows.Forms.ToolStripLabel();
 			this.toolStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -51,7 +52,8 @@
             this.openToolStripButton,
             this.saveToolStripButton,
             this.toolStripSeparator,
-            this.helpToolStripButton});
+            this.helpToolStripButton,
+            this.button_FastForward});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(622, 27);
@@ -120,6 +122,13 @@
 			// 
 			this.timerDraw.Enabled = true;
 			// 
+			// button_FastForward
+			// 
+			this.button_FastForward.Name = "button_FastForward";
+			this.button_FastForward.Size = new System.Drawing.Size(92, 24);
+			this.button_FastForward.Text = "Fast Forward";
+			this.button_FastForward.Click += new System.EventHandler(this.button_FastForward_Click);
+			// 
 			// Game
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -154,6 +163,7 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusStrip_ScoreLabel;
         private System.Windows.Forms.Timer timerDraw;
+		private System.Windows.Forms.ToolStripLabel button_FastForward;
 	}
 }
 

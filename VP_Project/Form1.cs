@@ -22,7 +22,7 @@ namespace VP_Project
 
 		private List<Balls.Ball> balls;
 
-		private static SolidBrush ballBrush = new SolidBrush(Color.Red);
+		private static SolidBrush ballBrush = new SolidBrush(Color.White);
 
 		private Timer ballsDraw;
 
@@ -76,7 +76,7 @@ namespace VP_Project
 				ball.Draw(e.Graphics, ballBrush);
 			}
 
-			ballStart.Draw(e.Graphics);
+			ballStart.Draw(balls.Count, e.Graphics);
         }
 
         private void MoveRowsDown()
@@ -103,16 +103,21 @@ namespace VP_Project
 				ball.Move();
 			}
 			Invalidate(true);
-        }
+			for (int i = 0; i < balls.Count; i++)
+			{
+				if (balls[i].BallDead)
+					balls.RemoveAt(i--);
+			}
+		}
 
 		private void Game_MouseClick(object sender, MouseEventArgs e)
 		{
 			Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
-			balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.2F));
+			balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 			
 			//balls.Add(new Balls.Ball(addBalls, Color.Black, 5.4F));
 
-			Debug.WriteLine(string.Format("Angle is {0}", (float)GetAngle(ballStart.currentPosition, e.Location) / 57.2F));
+			Debug.WriteLine(string.Format("Angle is {0}", (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 
 			//Debug.WriteLine("Clicked at X: {0}, Y: {1}", e.X, e.Y);
 			foreach(Row row in rows)
@@ -146,6 +151,19 @@ namespace VP_Project
 			var angle = (radian * (180 / Math.PI) + 360) % 360;
 
 			return angle;
+		}
+
+		private void button_FastForward_Click(object sender, EventArgs e)
+		{
+			if (button_FastForward.Text == "Fast Forward")
+			{
+				ballsDraw.Interval = 8;
+				button_FastForward.Text = "Normal";
+			} else
+			{
+				button_FastForward.Text = "Fast Forward";
+				ballsDraw.Interval = 32;
+			}
 		}
 	}
 }

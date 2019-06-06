@@ -122,6 +122,7 @@ namespace VP_Project.Balls
             if (nextX <= left || nextX - r - r - r >= width + left)
             {
                 velocityX = -velocityX;
+				velocityY += 0.2F;
             }
             if (nextY + r >= height + top)
             {

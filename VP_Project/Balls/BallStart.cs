@@ -16,7 +16,7 @@ namespace VP_Project.Blocks
 		public Point nextPosition { get; set; }
 
 		public static int Radius = (int)Constants.BALL_RADIUS;
-		public static Color currentColor = Color.Red;
+		public static Color currentColor = Color.White;
 		public static Color nextColor = Color.LimeGreen;
 		
 		public BallStart()
@@ -27,7 +27,7 @@ namespace VP_Project.Blocks
 			currentPosition = new Point(x, y);
 		}
 
-		public void Draw(Graphics g)
+		public void Draw(int ballsLeft, Graphics g)
 		{
 			SolidBrush currentBrush = new SolidBrush(currentColor), nextBrush = new SolidBrush(nextColor);
 
@@ -36,6 +36,8 @@ namespace VP_Project.Blocks
 
 			//Next Poistion
 			g.FillEllipse(nextBrush, nextPosition.X, nextPosition.Y, 2 * Radius, 2 * Radius);
+
+			DrawBallsLeft(ballsLeft, g);
 
 			currentBrush.Dispose();
 			nextBrush.Dispose();
@@ -54,6 +56,16 @@ namespace VP_Project.Blocks
 				x = Constants.RANDOM.Next(0 + Radius, Constants.FORM_RIGHT - Radius);
 				nextPosition = new Point(x, y);
 			}
+		}
+
+		private void DrawBallsLeft(int ballsLeft, Graphics g)
+		{
+			Font font = new Font("Arial", 10, FontStyle.Bold, GraphicsUnit.Point);
+			StringFormat stringFormat = new StringFormat();
+			stringFormat.Alignment = StringAlignment.Center;
+			stringFormat.LineAlignment = StringAlignment.Center;
+
+			g.DrawString(ballsLeft + "", font, Brushes.Black, currentPosition.X + Radius, currentPosition.Y + Radius, stringFormat);
 		}
 
 		private int GetDistance(Point current, Point next)
