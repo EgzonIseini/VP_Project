@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Balls
 {
-    class Balls
+    public class Balls
     {
         //numbers of balls
         int n;

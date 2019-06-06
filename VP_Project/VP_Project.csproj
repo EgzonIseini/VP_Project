@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Balls\Ball.cs" />
     <Compile Include="Balls\Balls.cs" />
+    <Compile Include="Balls\BallStart.cs" />
     <Compile Include="Blocks\Block.cs" />
     <Compile Include="Blocks\Row.cs" />
     <Compile Include="Blocks\SquareBlock.cs" />

@@ -116,6 +116,10 @@
 			this.statusStrip_ScoreLabel.Size = new System.Drawing.Size(69, 20);
 			this.statusStrip_ScoreLabel.Text = "Score: 32";
 			// 
+			// timerDraw
+			// 
+			this.timerDraw.Enabled = true;
+			// 
 			// Game
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -129,6 +133,7 @@
 			this.Text = "BBTan";
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Game_Paint);
 			this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Game_MouseClick);
+			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Game_MouseMove);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace VP_Project.Balls
 {
     
-    class Ball
+    public class Ball
     {
         public enum HitDirection {top, right, bottom, left, none}
         //radius of the ball
@@ -32,6 +32,7 @@ namespace VP_Project.Balls
             this.Center = Center;
             this.Color = color;
             this.Speed = 20;
+			this.r = Constants.BALL_RADIUS;
             setDirection(Angle);
         }
         //set the direction of the ball
@@ -118,17 +119,18 @@ namespace VP_Project.Balls
 
             float nextX = Center.X + velocityX;
             float nextY = Center.Y + velocityY;
-            if (nextX - r <= left || nextX + r >= width + left)
+            if (nextX <= left || nextX - r - r - r >= width + left)
             {
                 velocityX = -velocityX;
             }
             if (nextY + r >= height + top)
             {
-                velocityY = -velocityY;
-            }
+				BallDead = true;
+				//velocityY = -velocityY;
+			}
             if(nextY - r <= top)
             {
-                BallDead = true;
+				velocityY = -velocityY; 
             }
             Center = new Point((int)(Center.X + velocityX), (int)(Center.Y + velocityY));
         }
