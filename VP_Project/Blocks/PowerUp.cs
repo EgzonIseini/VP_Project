@@ -41,8 +41,6 @@ namespace VP_Project.Blocks
 
 		public override void CollisionTest(float X, float Y, int BallPower = 1)
 		{
-			Debug.WriteLine("PowerUp of type: {0}, with X: {1}, Y: {2}", Type, Collision.X, Collision.Y);
-
 			if (this.GetDistance(Collision, (int)X, (int)Y) <= 15 && this.Type != 0)
 			{
 				currentPowerup = this.Type;

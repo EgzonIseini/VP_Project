@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,33 +11,61 @@ namespace VP_Project.Balls
     public class Balls
     {
         //numbers of balls
-        int n;
-        List<Ball> allBalls;
-        public Balls(int n, Color color, float Angle) 
+        public int numBalls { get; set; }
+        public List<Ball> allBalls { get; set; }
+		Color color;
+		private Point pointToAdd;
+		private float Angle;
+		public int ballsLeft { get; set; }
+        public Balls(int n, Color color, float Angle, BallStart ballStart) 
         {
-            this.allBalls = new List<Ball>();
-            for(int i=0;i<n;i++)
-            {
-                allBalls.Add(new Ball(new Point(Constants.FORM_RIGHT / 2, 0), color, Angle));
-            }
+			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
+			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
+
+			pointToAdd = new Point(ballStart.currentPosition.X + (int)Constants.BALL_RADIUS, ballStart.currentPosition.Y);
+
+			this.Angle = Angle;
+			this.allBalls = new List<Ball>();
+			this.color = color;
+			numBalls = n;
+			ballsLeft = n;
         }
         public void checkBalls()
         {
-            for(int i=0;i<n;i++)
+            for(int i=0;i<allBalls.Count; i++)
             {
                 if(allBalls.ElementAt(i).BallDead)
                 {
-                    if (n == 0) break;
                     allBalls.RemoveAt(i);
-                    n--;
+					numBalls--;
                     i--;
                 }
             }
         }
         public bool AnyBallsLeft()
         {
-            return n == 0;
+            return numBalls == 0;
         }
-
+		public void Draw(Graphics g)
+		{
+			SolidBrush brush = new SolidBrush(color);
+			foreach(Ball b in allBalls)
+			{
+				b.Draw(g, brush);
+			}
+			brush.Dispose();
+		}
+		public void Move()
+		{
+			foreach(Ball b in allBalls)
+			{
+				b.Move();
+			}
+		}
+		public void AddBall()
+		{
+			allBalls.Add(new Ball(pointToAdd, color, Angle));
+			ballsLeft--;
+		}
     }
 }

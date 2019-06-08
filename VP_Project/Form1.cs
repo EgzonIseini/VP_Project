@@ -19,16 +19,18 @@ namespace VP_Project
 		// powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
 		// Can't have more than one powerup at a time. Initialized originally to 0.
 		private int powerupType;
-
-		private List<Balls.Ball> balls;
-
+		
 		private static SolidBrush ballBrush = new SolidBrush(Color.White);
 
 		private Timer ballsDraw;
 
-		private BallStart ballStart;
+		private Balls.BallStart ballStart;
 
 		private Point lastMouseLocation;
+
+		private Balls.Balls _balls;
+
+		private int ballsToAdd;
 
 
 		public Game()
@@ -42,13 +44,15 @@ namespace VP_Project
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-			this.balls = new List<Balls.Ball>();
 			this.ballsDraw = new Timer();
 			ballsDraw.Interval = 32;
 			ballsDraw.Tick += new EventHandler(timerDraw_Tick);
 			ballsDraw.Start();
 
-			ballStart = new BallStart();
+			ballStart = new Balls.BallStart();
+			_balls = new Balls.Balls(0, Color.Black, 0, ballStart);
+
+			this.ballsToAdd = 1;
 		}
 
         private void Game_Paint(object sender, PaintEventArgs e)
@@ -62,7 +66,7 @@ namespace VP_Project
 			blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
 
-			Point newPoint = new Point(ballStart.currentPosition.X + BallStart.Radius, ballStart.currentPosition.Y + BallStart.Radius);
+			Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
 			e.Graphics.DrawLine(blackPen, newPoint, lastMouseLocation);
             
             // Any other type of drawing goes below this comment.
@@ -70,14 +74,17 @@ namespace VP_Project
                 row.DrawBlocks(e.Graphics);
             }
 
-			// Testing out Mladens BALLS
+			/* Testing out Mladens BALLS
 			foreach (Balls.Ball ball in balls)
 			{
 				ball.Draw(e.Graphics, ballBrush);
-			}
+			}*/
 
-			ballStart.Draw(balls.Count, e.Graphics);
-        }
+			_balls.Draw(e.Graphics);
+
+			if(_balls.ballsLeft == 0) ballStart.Draw(ballsToAdd, e.Graphics);
+			else ballStart.Draw(_balls.ballsLeft, e.Graphics);
+		}
 
         private void MoveRowsDown()
         {
@@ -98,26 +105,29 @@ namespace VP_Project
         private void timerDraw_Tick(object sender, EventArgs e)
         {
 			// Testing out the BALLS
-			foreach (Balls.Ball ball in balls)
-			{
-				ball.Move();
-			}
+			_balls.Move();
+
 			Invalidate(true);
-			for (int i = 0; i < balls.Count; i++)
-			{
-				if (balls[i].BallDead)
-					balls.RemoveAt(i--);
-			}
+
+			_balls.checkBalls();
 		}
 
 		private void Game_MouseClick(object sender, MouseEventArgs e)
 		{
-			Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
-			balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
+			if (_balls.allBalls.Count == 0)
+			{
+				if( powerupType != 3) _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
+				else
+				{
+					_balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
+					powerupType = 0;
+				}
+			}
+			
+			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
+			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 			
 			//balls.Add(new Balls.Ball(addBalls, Color.Black, 5.4F));
-
-			Debug.WriteLine(string.Format("Angle is {0}", (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 
 			//Debug.WriteLine("Clicked at X: {0}, Y: {1}", e.X, e.Y);
 			foreach(Row row in rows)
@@ -142,7 +152,7 @@ namespace VP_Project
 			lastMouseLocation = e.Location;
 		}
 
-		private double GetAngle(Point start, Point arrival)
+		private float GetAngle(Point start, Point arrival)
 		{
 			var deltaX = Math.Pow((arrival.X - start.X), 2);
 			var deltaY = Math.Pow((arrival.Y - start.Y), 2);
@@ -150,7 +160,7 @@ namespace VP_Project
 			var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
 			var angle = (radian * (180 / Math.PI) + 360) % 360;
 
-			return angle;
+			return (float)angle / 57.4F;
 		}
 
 		private void button_FastForward_Click(object sender, EventArgs e)
@@ -164,6 +174,12 @@ namespace VP_Project
 				button_FastForward.Text = "Fast Forward";
 				ballsDraw.Interval = 32;
 			}
+		}
+
+		private void ballAdder_Tick(object sender, EventArgs e)
+		{
+			if (_balls.allBalls.Count < _balls.numBalls) _balls.AddBall();
+			//Debug.WriteLine(string.Format("ballAdder called. {0} {1}", _balls.allBalls.Count, _balls.numBalls));
 		}
 	}
 }

@@ -36,10 +36,11 @@
 			this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
 			this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
+			this.button_FastForward = new System.Windows.Forms.ToolStripLabel();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusStrip_ScoreLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.timerDraw = new System.Windows.Forms.Timer(this.components);
-			this.button_FastForward = new System.Windows.Forms.ToolStripLabel();
+			this.ballAdder = new System.Windows.Forms.Timer(this.components);
 			this.toolStrip1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -101,6 +102,13 @@
 			this.helpToolStripButton.Size = new System.Drawing.Size(24, 24);
 			this.helpToolStripButton.Text = "He&lp";
 			// 
+			// button_FastForward
+			// 
+			this.button_FastForward.Name = "button_FastForward";
+			this.button_FastForward.Size = new System.Drawing.Size(92, 24);
+			this.button_FastForward.Text = "Fast Forward";
+			this.button_FastForward.Click += new System.EventHandler(this.button_FastForward_Click);
+			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -122,12 +130,11 @@
 			// 
 			this.timerDraw.Enabled = true;
 			// 
-			// button_FastForward
+			// ballAdder
 			// 
-			this.button_FastForward.Name = "button_FastForward";
-			this.button_FastForward.Size = new System.Drawing.Size(92, 24);
-			this.button_FastForward.Text = "Fast Forward";
-			this.button_FastForward.Click += new System.EventHandler(this.button_FastForward_Click);
+			this.ballAdder.Enabled = true;
+			this.ballAdder.Interval = 200;
+			this.ballAdder.Tick += new System.EventHandler(this.ballAdder_Tick);
 			// 
 			// Game
 			// 
@@ -164,6 +171,7 @@
         private System.Windows.Forms.ToolStripStatusLabel statusStrip_ScoreLabel;
         private System.Windows.Forms.Timer timerDraw;
 		private System.Windows.Forms.ToolStripLabel button_FastForward;
+		private System.Windows.Forms.Timer ballAdder;
 	}
 }
 

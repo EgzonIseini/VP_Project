@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace VP_Project.Blocks
+namespace VP_Project.Balls
 {
 	public class BallStart
 	{
