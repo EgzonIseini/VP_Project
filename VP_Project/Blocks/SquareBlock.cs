@@ -37,16 +37,27 @@ namespace VP_Project.Blocks
             pen.Dispose();
         }
 
-        public override void CollisionTest(float X, float Y, int BallPower = 1)
+        private float GetDistance(Point p1, Point p2)
         {
-            if ((Y >= this.Y && Y <= this.Y + Constants.BLOCK_HEIGHT) &&
-               ((X + Constants.BALL_RADIUS >= this.X) || (X - Constants.BALL_RADIUS <= this.X)))
-            {
-                WasHit(BallPower);
-            }
-            else if ((X >= this.X && X <= this.X + Constants.BLOCK_WIDTH) &&
-                    ((Y + Constants.BALL_RADIUS >= this.Y) || (Y - Constants.BALL_RADIUS <= this.Y)))
-                WasHit(BallPower);
+            return (float) Math.Sqrt(((p1.Y - p2.Y) * (p1.Y - p2.Y)) + (p1.X - p2.X) * (p1.X - p2.X));
+        }
+
+        public override bool CollisionTest(float X, float Y, int BallPower = 1)
+        {
+            int x = (int) this.X;
+            int y = (int) this.Y;
+            Point a = new Point(x, y);
+            Point b = new Point(x + Constants.BLOCK_WIDTH, y);
+            Point c = new Point(x, y + Constants.BLOCK_HEIGHT);
+            Point d = new Point(x + Constants.BLOCK_WIDTH, y + Constants.BLOCK_HEIGHT);
+            Point Circle = new Point((int) X, (int) Y);
+
+            float o1 = GetDistance(Circle, a);
+            float o2 = GetDistance(Circle, b);
+            float o3 = GetDistance(Circle, c);
+            float o4 = GetDistance(Circle, d);
+
+            return false;
         }
     }
 }

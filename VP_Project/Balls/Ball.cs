@@ -101,11 +101,12 @@ namespace VP_Project.Balls
 
             float distX = cx - testX;
             float distY = cy - testY;
-            float distance = (float)Math.Sqrt((distX * distX) + (distY * distY));
+            float distance = (float) Math.Sqrt((distX * distX) + (distY * distY));
 
             if (distance <= radius)
             {
-                return (int)dir;
+                ChangeDirection(dir);
+                return (int) dir;
             }
             return -1;
         }

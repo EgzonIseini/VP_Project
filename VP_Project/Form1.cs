@@ -32,6 +32,7 @@ namespace VP_Project
 
 		private int ballsToAdd;
 
+        private bool MouseWasClicked;
 
 		public Game()
         {
@@ -48,7 +49,7 @@ namespace VP_Project
 			ballsDraw.Interval = 32;
 			ballsDraw.Tick += new EventHandler(timerDraw_Tick);
 			ballsDraw.Start();
-
+            this.MouseWasClicked = false;
 			ballStart = new Balls.BallStart();
 			_balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
@@ -57,8 +58,6 @@ namespace VP_Project
 
         private void Game_Paint(object sender, PaintEventArgs e)
         { 
-            // This is the first line which sets the canvas for painting. Only use this
-            // to initalize the canvas i.e. set color, size etc.
             e.Graphics.Clear(Color.DimGray);
 
 			Brush black = new SolidBrush(Color.Black);
@@ -68,27 +67,26 @@ namespace VP_Project
 
 			Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
 			e.Graphics.DrawLine(blackPen, newPoint, lastMouseLocation);
-            
-            // Any other type of drawing goes below this comment.
-            foreach (Row row in rows) { 
+
+            foreach (Row row in rows)
+            {
                 row.DrawBlocks(e.Graphics);
             }
 
-			/* Testing out Mladens BALLS
-			foreach (Balls.Ball ball in balls)
-			{
-				ball.Draw(e.Graphics, ballBrush);
-			}*/
+            _balls.Draw(e.Graphics);
 
-			_balls.Draw(e.Graphics);
+            if (_balls.ballsLeft == 0)
+            {
+                ballStart.Draw(ballsToAdd, e.Graphics);
 
-			if(_balls.ballsLeft == 0) ballStart.Draw(ballsToAdd, e.Graphics);
-			else ballStart.Draw(_balls.ballsLeft, e.Graphics);
+            }
+            else
+                ballStart.Draw(_balls.ballsLeft, e.Graphics);
 		}
 
         private void MoveRowsDown()
         {
-            timerDraw.Enabled = false;
+           timerDraw.Enabled = false;
             for (float f = 0; f < Constants.BLOCK_HEIGHT; f += Constants.BLOCK_MOVE_SPEED)
             {
                 foreach (Row row in rows)
@@ -99,7 +97,7 @@ namespace VP_Project
             }
             rows.Add(new Row());
             this.Refresh();
-            timerDraw.Enabled = true;
+           timerDraw.Enabled = true;
         }
 
         private void timerDraw_Tick(object sender, EventArgs e)
@@ -114,43 +112,45 @@ namespace VP_Project
 
 		private void Game_MouseClick(object sender, MouseEventArgs e)
 		{
-			if (_balls.allBalls.Count == 0)
-			{
-				if( powerupType != 3) _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
-				else
-				{
-					_balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
-					powerupType = 0;
-				}
-			}
-			
-			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
-			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
-			
-			//balls.Add(new Balls.Ball(addBalls, Color.Black, 5.4F));
+            if (_balls.allBalls.Count == 0)
+            {
+                if (powerupType != 3) _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
+                else
+                {
+                    _balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, e.Location), ballStart);
+                    powerupType = 0;
+                }
+            }
 
-			//Debug.WriteLine("Clicked at X: {0}, Y: {1}", e.X, e.Y);
-			foreach(Row row in rows)
-			{
-				row.CollisionsTest(e.X, e.Y);
-			}
+            MouseWasClicked = true;
 
-			powerupType = PowerUp.currentPowerup;
-
-			//ballStart.GenerateNewPositions();
+            powerupType = PowerUp.currentPowerup;
 
 			Invalidate(true);
-
-			/*|if (powerupType != 0)
-			{
-				MessageBox.Show(string.Format("Picked up a powerup of type: {0}", powerupType.ToString()));
-			}*/
+   
 		}
 
 		private void Game_MouseMove(object sender, MouseEventArgs e)
 		{
 			lastMouseLocation = e.Location;
 		}
+
+        private void CollisionDetection()
+        {
+            foreach (var ball in _balls.allBalls)
+            {
+                foreach (Row row in rows)
+                {
+                    foreach (Block b in row.blocks)
+                    {
+                        if (ball.checkCollision(b) != -1)
+                            b.WasHit();
+                    }
+                    row.CollisionsTest();
+
+                }
+            }
+        }
 
 		private float GetAngle(Point start, Point arrival)
 		{
@@ -178,8 +178,8 @@ namespace VP_Project
 
 		private void ballAdder_Tick(object sender, EventArgs e)
 		{
-			if (_balls.allBalls.Count < _balls.numBalls) _balls.AddBall();
-			//Debug.WriteLine(string.Format("ballAdder called. {0} {1}", _balls.allBalls.Count, _balls.numBalls));
+			if (_balls.allBalls.Count < _balls.numBalls)
+                _balls.AddBall();
 		}
 	}
 }

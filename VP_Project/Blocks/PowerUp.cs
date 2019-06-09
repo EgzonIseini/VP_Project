@@ -39,13 +39,14 @@ namespace VP_Project.Blocks
 			if(type != 0) Image = new Bitmap(Constants.powerUpImages[type]);
 		}
 
-		public override void CollisionTest(float X, float Y, int BallPower = 1)
+		public override bool CollisionTest(float X, float Y, int BallPower = 1)
 		{
 			if (this.GetDistance(Collision, (int)X, (int)Y) <= 15 && this.Type != 0)
 			{
 				currentPowerup = this.Type;
 				this.Type = 0;
 			}
+            return false;
 			
 		}
 
@@ -60,7 +61,7 @@ namespace VP_Project.Blocks
 
 		private int GetDistance(Point powerup, int X, int Y)
 		{
-			return (int)Math.Sqrt((powerup.X - X) * (powerup.X - X) + (powerup.Y - Y) * (powerup.Y - Y));
+			return (int) Math.Sqrt((powerup.X - X) * (powerup.X - X) + (powerup.Y - Y) * (powerup.Y - Y));
 		}
 	}
 }

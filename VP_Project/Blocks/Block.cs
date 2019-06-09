@@ -45,7 +45,8 @@ namespace VP_Project.Blocks
         /// <param name="X">X-Coordinate of ball</param>
         /// <param name="Y">Y-Coordinate of ball</param>
         /// <param name="BallPower">Power of the Ball, default 1</param>
-        public abstract void CollisionTest(float X, float Y, int BallPower = 1);
+        /// <returns>true if a collision happened, false otherwise</returns>
+        public abstract bool CollisionTest(float X, float Y, int BallPower = 1);
 
         /// <summary>
         /// Method to find the distance between ball and block

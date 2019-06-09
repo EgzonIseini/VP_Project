@@ -259,3 +259,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/VP_Project/Weapons/Balls.cs
+/VP_Project/Weapons/Ball.cs
+/VP_Project/Weapons
+/VP_Project/Blocks/Rows.cs
+/VP_Project/Blocks
+/VP_Project

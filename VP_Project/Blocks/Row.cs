@@ -9,7 +9,7 @@ namespace VP_Project.Blocks
 {
     public class Row
     {
-        private List<Block> blocks;
+        public List<Block> blocks;
         private static int RowNum = 0;
         /// <summary>
         /// Genertes new Row in Game
@@ -36,8 +36,8 @@ namespace VP_Project.Blocks
 					int randomPowerUp = Constants.RANDOM.Next(0, 101);
 					int type = Constants.RANDOM.Next(1, 5);
 
-					if(randomPowerUp % 2 == 0) blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
-					else blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
+					blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+					//else blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
 
 					//blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
 				}
@@ -61,12 +61,8 @@ namespace VP_Project.Blocks
         /// <param name="X">X-coordinate of ball</param>
         /// <param name="Y">Y-coordinate of ball</param>
         /// <param name="BallPower">Power of Ball, default value 1</param>
-        public void CollisionsTest(float X, float Y, int BallPower = 1)
+        public void CollisionsTest()
         {
-            foreach (Block block in blocks)
-            {
-                block.CollisionTest(X, Y, BallPower);
-            }
 
             for (int i = 0; i < blocks.Count; i++)
             {
