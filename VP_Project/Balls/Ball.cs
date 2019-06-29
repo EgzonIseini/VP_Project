@@ -48,11 +48,11 @@ namespace VP_Project.Balls
             float angle = this.Angle;
             if(dir == HitDirection.left ||dir==HitDirection.right)
             {
-                this.velocityX = -this.velocityX;
+                this.velocityX = (-1) *this.velocityX;
             }
             else if(dir == HitDirection.top || dir == HitDirection.bottom)
             {
-                this.velocityY = -this.velocityY;
+                this.velocityY = (-1) * this.velocityY;
             }
             
             this.setDirection(angle);
@@ -105,6 +105,8 @@ namespace VP_Project.Balls
 
             if (distance <= radius)
             {
+                block.WasHit();
+                ChangeDirection(dir);
                 return (int)dir;
             }
             return -1;

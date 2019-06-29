@@ -9,14 +9,14 @@ namespace VP_Project.Blocks
 {
     public class Row
     {
-        private List<Block> blocks;
+        public List<Block> Blocks { get; }
         private static int RowNum = 0;
         /// <summary>
         /// Genertes new Row in Game
         /// </summary>
         public Row()
         {
-            blocks = new List<Block>();
+            Blocks = new List<Block>();
             RowNum++;
             GenerateRow();
         }
@@ -36,10 +36,10 @@ namespace VP_Project.Blocks
 					//int randomPowerUp = Constants.RANDOM.Next(0, 101);
 					//int type = Constants.RANDOM.Next(1, 5);
 
-					//if(randomPowerUp % 2 == 0) blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
-					//else blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
+					//if(randomPowerUp % 2 == 0) Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+					//else Blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
 
-					blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
+					Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, RowNum));
 				}
             }
         }
@@ -49,7 +49,9 @@ namespace VP_Project.Blocks
         /// </summary>
         public void DrawBlocks(Graphics g)
         {
-            foreach (Block b in blocks)
+            RemoveKilledBlocks();
+
+            foreach (Block b in Blocks)
             {
                 b.Draw(g);
             }
@@ -63,21 +65,29 @@ namespace VP_Project.Blocks
         /// <param name="BallPower">Power of Ball, default value 1</param>
         public void CollisionsTest(float X, float Y, int BallPower = 1)
         {
-            foreach (Block block in blocks)
+            foreach (Block block in Blocks)
             {
                 block.CollisionTest(X, Y, BallPower);
             }
 
-            for (int i = 0; i < blocks.Count; i++)
+        }
+
+
+        /// <summary>
+        /// Deletes blocks with HP <= 0 from the row.
+        /// </summary>
+        private void RemoveKilledBlocks()
+        {
+            for (int i = 0; i < Blocks.Count; i++)
             {
-                if (!blocks[i].exists)
-                    blocks.RemoveAt(i--);
+                if (!Blocks[i].exists)
+                    Blocks.RemoveAt(i--);
             }
         }
 
         public void MoveRowDown()
         {
-            foreach (Block block in blocks)
+            foreach (Block block in Blocks)
             {
                 block.Y = block.Y + Constants.BLOCK_MOVE_SPEED;
             }
