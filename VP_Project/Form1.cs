@@ -32,6 +32,7 @@ namespace VP_Project
 
 		private int ballsToAdd;
 
+        private bool ShotWasTaken;
 
         // <--------------- FORM METHODS ---------------------->
 
@@ -89,10 +90,20 @@ namespace VP_Project
 
             _balls.Draw(e.Graphics);
 
-            if (_balls.ballsLeft == 0)
+            if (_balls.allBalls.Count == 0)
+            {
                 ballStart.Draw(ballsToAdd, e.Graphics);
+                if (ShotWasTaken)
+                {
+                    ShotWasTaken = false;
+                    MoveRowsDown();
+                }
+            }
             else
+            { 
                 ballStart.Draw(_balls.ballsLeft, e.Graphics);
+                ShotWasTaken = true;
+            }
         }
 
         private void ballAdder_Tick(object sender, EventArgs e)
@@ -145,8 +156,8 @@ namespace VP_Project
 
         private void ThrowBalls(Point location)
         {
-
-            if (powerupType != 3) _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
+            if (powerupType != 3)
+                _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
             else
             {
                 _balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
