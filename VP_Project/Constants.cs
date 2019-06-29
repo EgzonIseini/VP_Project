@@ -21,7 +21,7 @@ namespace VP_Project
         public static readonly float BLOCK_MOVE_SPEED = 1F;
         public static readonly int PROBABILITY_OF_BLOCK = 7; // determines the probability of a block being generated in a row
         public static readonly int NUM_OF_BLOCKS_IN_ROW = 10;
-        public static readonly float BALL_RADIUS = 15F; // dummy value for calcuation purposes, change it accordingly
+        public static readonly float BALL_RADIUS = 5F; // dummy value for calcuation purposes, change it accordingly
 
         public static readonly int FORM_TOP = 30;
         public static readonly int FORM_BOTTOM = 620;

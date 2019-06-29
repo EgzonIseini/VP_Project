@@ -46,9 +46,9 @@ namespace VP_Project.Balls
         public void ChangeDirection(HitDirection dir)
         {
             float angle = this.Angle;
-            if(dir == HitDirection.left ||dir==HitDirection.right)
+            if (dir == HitDirection.left || dir == HitDirection.right)
             {
-                this.velocityX = (-1) *this.velocityX;
+                this.velocityX = (-1) * this.velocityX;
             }
             else if(dir == HitDirection.top || dir == HitDirection.bottom)
             {
@@ -56,6 +56,8 @@ namespace VP_Project.Balls
             }
             
             this.setDirection(angle);
+            Center = new Point((int)(Center.X + velocityX), (int)(Center.Y + velocityY));
+
         }
 
         public void Draw(Graphics g, SolidBrush brush)
@@ -136,6 +138,7 @@ namespace VP_Project.Balls
 				velocityY = -velocityY; 
             }
             Center = new Point((int)(Center.X + velocityX), (int)(Center.Y + velocityY));
+
         }
     }
 }
