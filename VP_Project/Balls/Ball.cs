@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Balls
 {
-    
+
     public class Ball
     {
-        public enum HitDirection {top, right, bottom, left, none}
+        public enum HitDirection { top, right, bottom, left, none }
         //radius of the ball
         public float r { get; set; }
         //color of the ball
@@ -27,12 +27,14 @@ namespace VP_Project.Balls
         //if the ball hits the bottom of the form
         public bool BallDead { get; set; }
 
+        private bool HitOnce;
+
         public Ball(Point Center, Color color, float Angle)
         {
             this.Center = Center;
             this.Color = color;
-            this.Speed = 20;
-			this.r = Constants.BALL_RADIUS;
+            this.Speed = 10;
+            this.r = Constants.BALL_RADIUS;
             setDirection(Angle);
         }
         //set the direction of the ball
@@ -50,68 +52,97 @@ namespace VP_Project.Balls
             {
                 this.velocityX = (-1) * this.velocityX;
             }
-            else if(dir == HitDirection.top || dir == HitDirection.bottom)
+            else if (dir == HitDirection.top || dir == HitDirection.bottom)
             {
                 this.velocityY = (-1) * this.velocityY;
             }
-            
-            this.setDirection(angle);
-            Center = new Point((int)(Center.X + velocityX), (int)(Center.Y + velocityY));
 
+            this.setDirection(angle);
         }
 
         public void Draw(Graphics g, SolidBrush brush)
         {
-           // Brush brush = new SolidBrush(this.Color);
+            HitOnce = false;
             g.FillEllipse(brush, Center.X - r, Center.Y - r, r * 2, r * 2);
-           //brush.Dispose();
         }
-        //check if the ball is hitting a block
-        public int checkCollision(Blocks.Block block)
+        
+
+        private double DistanceToLine(PointF o, PointF a, PointF b)
         {
-            HitDirection dir = HitDirection.none;
-            float cx = this.Center.X;
-            float cy = this.Center.Y;
-            float radius = this.r;
-            float rx = block.X;
-            float ry = block.Y;
-            float rw = Constants.BLOCK_HEIGHT;
-            float rh = Constants.BLOCK_WIDTH;
-            float testX = cx;
-            float testY = cy;
-            if (cx < rx)
-            {
-                testX = rx;
-                dir = HitDirection.left;
-            }// left edge
-            else if (cx > rx + rw)
-            {
-                 testX = rx + rw;
-                dir = HitDirection.right;
-            }// right edge
+            return Math.Abs(((a.Y - b.Y) * o.X) - ((a.X - b.X) * o.Y) + a.X * b.Y - b.X * a.Y) 
+                    / Math.Sqrt((a.Y - b.Y) * (a.Y - b.Y) + (a.X - b.X) * (a.X - b.X));
+        }
 
-            if (cy < ry)
-            {
-                dir = HitDirection.top;
-                testY = ry;
-            }// top edge
-            else if (cy > ry + rh)
-            {
-                dir = HitDirection.bottom;
-                testY = ry + rh;
-            }// bottom edge
+        public bool checkCollision(Blocks.Block block)
+        {
+            //Points are labeled starting from the top-left corner and continuing clockwise
 
-            float distX = cx - testX;
-            float distY = cy - testY;
-            float distance = (float)Math.Sqrt((distX * distX) + (distY * distY));
+            if (HitOnce)
+                return false;
+            
 
-            if (distance <= radius)
+            PointF a = new PointF(block.X, block.Y);
+            PointF b = new PointF(block.X + Constants.BLOCK_WIDTH, block.Y);
+            PointF c = new PointF(block.X + Constants.BLOCK_WIDTH, block.Y + Constants.BLOCK_HEIGHT);
+            PointF d = new PointF(block.X, block.Y + Constants.BLOCK_HEIGHT);
+
+            //Check if the ball is totally away from the block
+            if (Center.X + r < a.X || Center.X - r > b.X || Center.Y < a.Y + r || Center.Y - r > c.Y)
             {
-                block.WasHit();
-                ChangeDirection(dir);
-                return (int)dir;
+                return false;
             }
-            return -1;
+
+            //Line 1 a-b
+            //Line 2 b-c
+            //Line 3 c-d
+            //Line 4 d-a
+
+            double d1 = DistanceToLine(Center, a, b);
+            double d2 = DistanceToLine(Center, b, c);
+            double d3 = DistanceToLine(Center, c, d);
+            double d4 = DistanceToLine(Center, d, a);
+
+            Console.WriteLine(string.Format("{0} {1} {2} {3}\n", d1, d2, d3, d4));
+
+
+            bool WasHit = false;
+            
+            if (d1 < Constants.DELTA)
+            {
+                //Ball hit the top side
+                this.velocityY = -this.velocityY;
+
+                WasHit = true;
+            }
+            else if (d2 < Constants.DELTA)
+            {
+                //Ball hit the right side
+                this.velocityX = -this.velocityX;
+
+                WasHit = true;
+            } 
+            else if (d3 < Constants.DELTA)
+            {
+                //Ball hit the bottom side
+                this.velocityY = -this.velocityY;
+
+                WasHit = true;
+            }
+            else if (d4 < Constants.DELTA)
+            {
+                //Ball hit the left side
+                this.velocityX = -this.velocityX;
+                
+                WasHit = true;
+            }
+            
+            if (WasHit) { 
+                block.WasHit();
+                HitOnce = true;
+                Move();
+
+            }
+            return WasHit;
         }
 
         public void Move()
@@ -126,19 +157,18 @@ namespace VP_Project.Balls
             if (nextX <= left || nextX - r - r - r >= width + left)
             {
                 velocityX = -velocityX;
-				velocityY += 0.2F;
             }
             if (nextY + r >= height + top)
             {
-				BallDead = true;
-				//velocityY = -velocityY;
-			}
-            if(nextY - r <= top)
+                BallDead = true;
+            }
+            if (nextY - r <= top)
             {
-				velocityY = -velocityY; 
+                velocityY = -velocityY;
             }
             Center = new Point((int)(Center.X + velocityX), (int)(Center.Y + velocityY));
 
         }
+
     }
 }

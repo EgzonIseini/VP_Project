@@ -174,7 +174,7 @@ namespace VP_Project
             var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
             var angle = (radian * (180 / Math.PI) + 360) % 360;
 
-            return (float)angle / 57.4F;
+            return (float) radian;
         }
 
         private void InitGame()
