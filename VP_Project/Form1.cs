@@ -69,21 +69,20 @@ namespace VP_Project
 			Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
 			e.Graphics.DrawLine(blackPen, newPoint, lastMouseLocation);
             
+
+            
+
             // Any other type of drawing goes below this comment.
             foreach (Row row in rows) { 
                 row.DrawBlocks(e.Graphics);
             }
 
-			/* Testing out Mladens BALLS
-			foreach (Balls.Ball ball in balls)
-			{
-				ball.Draw(e.Graphics, ballBrush);
-			}*/
-
 			_balls.Draw(e.Graphics);
 
-			if(_balls.ballsLeft == 0) ballStart.Draw(ballsToAdd, e.Graphics);
-			else ballStart.Draw(_balls.ballsLeft, e.Graphics);
+			if(_balls.ballsLeft == 0)
+                ballStart.Draw(ballsToAdd, e.Graphics);
+			else
+                ballStart.Draw(_balls.ballsLeft, e.Graphics);
 		}
 
         private void MoveRowsDown()
@@ -123,28 +122,10 @@ namespace VP_Project
 					powerupType = 0;
 				}
 			}
-			
-			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
-			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
-			
-			//balls.Add(new Balls.Ball(addBalls, Color.Black, 5.4F));
-
-			//Debug.WriteLine("Clicked at X: {0}, Y: {1}", e.X, e.Y);
-			foreach(Row row in rows)
-			{
-				row.CollisionsTest(e.X, e.Y);
-			}
 
 			powerupType = PowerUp.currentPowerup;
 
-			//ballStart.GenerateNewPositions();
-
-			Invalidate(true);
-
-			/*|if (powerupType != 0)
-			{
-				MessageBox.Show(string.Format("Picked up a powerup of type: {0}", powerupType.ToString()));
-			}*/
+            Invalidate(true);
 		}
 
 		private void Game_MouseMove(object sender, MouseEventArgs e)
