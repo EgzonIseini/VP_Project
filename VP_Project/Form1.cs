@@ -9,18 +9,20 @@ using System.Threading.Tasks;
 using VP_Project.Blocks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Media;
 
 namespace VP_Project
 {
     public partial class Game : Form
     {
+        // <------------------ MEMBER VARIABLES ---------------->
         private List<Row> rows;
 
 		// powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
 		// Can't have more than one powerup at a time. Initialized originally to 0.
 		private int powerupType;
 		
-		private static SolidBrush ballBrush = new SolidBrush(Color.White);
+		private static SolidBrush ballBrush;
 
 		private Timer ballsDraw;
 
@@ -33,6 +35,8 @@ namespace VP_Project
 		private int ballsToAdd;
 
         private bool ShotWasTaken;
+
+        private SoundPlayer soundPlayer;
 
         // <--------------- FORM METHODS ---------------------->
 
@@ -73,11 +77,13 @@ namespace VP_Project
 
             foreach (Balls.Ball ball in this._balls.allBalls)
             {
+                ball.HitOnce = false;
                 foreach (Row row in rows)
                 {
                     foreach (Block block in row.Blocks)
                     {
-                        ball.checkCollision(block);
+                        if (ball.checkCollision(block))
+                            soundPlayer.Play();
                     }
                 }
             }
@@ -152,6 +158,8 @@ namespace VP_Project
             rows.Add(new Row());
             this.Refresh();
             timerDraw.Enabled = true;
+            ballsToAdd++;
+
         }
 
         private void ThrowBalls(Point location)
@@ -168,12 +176,7 @@ namespace VP_Project
 
         private float GetAngle(Point start, Point arrival)
         {
-            var deltaX = Math.Pow((arrival.X - start.X), 2);
-            var deltaY = Math.Pow((arrival.Y - start.Y), 2);
-
-            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
-            var angle = (radian * (180 / Math.PI) + 360) % 360;
-
+            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));             
             return (float) radian;
         }
 
@@ -187,15 +190,17 @@ namespace VP_Project
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.ballsDraw = new Timer();
+            this.ballsDraw = new Timer();   
             ballsDraw.Interval = 32;
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
-
+            soundPlayer = new SoundPlayer(Properties.Resources.hitSound);
+            
+            ballBrush = new SolidBrush(Color.White);
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
-            this.ballsToAdd = 1;
+            this.ballsToAdd = 10;
         }
 
     }

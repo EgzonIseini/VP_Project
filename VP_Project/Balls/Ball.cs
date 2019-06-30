@@ -27,14 +27,14 @@ namespace VP_Project.Balls
         //if the ball hits the bottom of the form
         public bool BallDead { get; set; }
 
-        private bool HitOnce;
+        public bool HitOnce;
 
         public Ball(Point Center, Color color, float Angle)
         {
+            this.r = Constants.BALL_RADIUS;
             this.Center = Center;
             this.Color = color;
             this.Speed = 10;
-            this.r = Constants.BALL_RADIUS;
             setDirection(Angle);
         }
         //set the direction of the ball
@@ -62,8 +62,7 @@ namespace VP_Project.Balls
 
         public void Draw(Graphics g, SolidBrush brush)
         {
-            HitOnce = false;
-            g.FillEllipse(brush, Center.X - r, Center.Y - r, r * 2, r * 2);
+            g.FillEllipse(brush, Center.X - r, Center.Y - r, 2 * r , 2 * r);
         }
         
 
@@ -77,9 +76,8 @@ namespace VP_Project.Balls
         {
             //Points are labeled starting from the top-left corner and continuing clockwise
 
-            if (HitOnce)
-                return false;
-            
+
+            //return CheckCollision(block);
 
             PointF a = new PointF(block.X, block.Y);
             PointF b = new PointF(block.X + Constants.BLOCK_WIDTH, block.Y);
@@ -87,60 +85,55 @@ namespace VP_Project.Balls
             PointF d = new PointF(block.X, block.Y + Constants.BLOCK_HEIGHT);
 
             //Check if the ball is totally away from the block
-            if (Center.X + r < a.X || Center.X - r > b.X || Center.Y < a.Y + r || Center.Y - r > c.Y)
-            {
-                return false;
-            }
 
             //Line 1 a-b
             //Line 2 b-c
             //Line 3 c-d
             //Line 4 d-a
-
+            Point Center = new Point(this.Center.X + (int)r, this.Center.Y + (int)r);
             double d1 = DistanceToLine(Center, a, b);
             double d2 = DistanceToLine(Center, b, c);
             double d3 = DistanceToLine(Center, c, d);
             double d4 = DistanceToLine(Center, d, a);
 
-            Console.WriteLine(string.Format("{0} {1} {2} {3}\n", d1, d2, d3, d4));
-
+            //Console.WriteLine(string.Format("{0} {1} {2} {3}\n", d1, d2, d3, d4));
 
             bool WasHit = false;
-            
-            if (d1 < Constants.DELTA)
+            int x = this.Center.X, y = this.Center.Y;
+
+            if (d1 <= r && Center.X + r >= a.X && Center.X - r <= b.X)
             {
                 //Ball hit the top side
-                this.velocityY = -this.velocityY;
-
+                this.velocityY = -Math.Abs(this.velocityY);
                 WasHit = true;
             }
-            else if (d2 < Constants.DELTA)
+
+            if (d2 <= r && Center.Y + r >= b.Y && Center.Y - r <= c.Y)
             {
                 //Ball hit the right side
-                this.velocityX = -this.velocityX;
-
+                this.velocityX = Math.Abs(this.velocityX);
+               // x += (int)(Constants.DELTA + r);
                 WasHit = true;
-            } 
-            else if (d3 < Constants.DELTA)
+            }
+
+            if (d3 <= r && Center.X + r >= a.X && Center.X - r <= b.X)
             {
                 //Ball hit the bottom side
-                this.velocityY = -this.velocityY;
-
+                this.velocityY = Math.Abs(this.velocityY);
                 WasHit = true;
             }
-            else if (d4 < Constants.DELTA)
+            if (d4 <= r && Center.Y + r >= b.Y && Center.Y - r <= c.Y)
             {
                 //Ball hit the left side
-                this.velocityX = -this.velocityX;
-                
+                this.velocityX = -Math.Abs(this.velocityX);
                 WasHit = true;
-            }
-            
+            }  
+
             if (WasHit) { 
                 block.WasHit();
                 HitOnce = true;
                 Move();
-
+                Center = new Point(x, y);
             }
             return WasHit;
         }

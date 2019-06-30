@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\coin.png" />
+    <Content Include="Resources\hitSound.wav" />
     <None Include="Resources\doubledmg.png" />
     <None Include="Resources\doubleball.png" />
     <Content Include="Resources\finki.png" />
