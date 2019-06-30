@@ -23,6 +23,8 @@ namespace VP_Project
         public static readonly int NUM_OF_BLOCKS_IN_ROW = 10;
         public static readonly float BALL_RADIUS = 5F; // dummy value for calcuation purposes, change it accordingly
         public static readonly int DELTA = 0;
+        public static int WINDOW_HEIGHT;
+        public static int WINDOW_WIDTH;
 
         public static readonly int FORM_TOP = 30;
         public static readonly int FORM_BOTTOM = 620;

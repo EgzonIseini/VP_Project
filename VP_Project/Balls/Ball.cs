@@ -153,7 +153,7 @@ namespace VP_Project.Balls
 
             float nextX = Center.X + velocityX;
             float nextY = Center.Y + velocityY;
-            if (nextX <= left || nextX - r - r - r >= width + left)
+            if (nextX <= left || nextX -8*r >= width + left)
             {
                 velocityX = -velocityX;
             }

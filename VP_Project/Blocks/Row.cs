@@ -80,5 +80,31 @@ namespace VP_Project.Blocks
             }
         }
 
+        /// <summary>
+        /// Checks if row contains any blocks
+        /// </summary>
+        /// <returns>true if empty, false otherwise</returns>
+        public bool IsEmpty()
+        {
+            return Blocks.Count == 0;
+        }
+
+        /// <summary>
+        /// Method to check whether row is out of the bounds of the window
+        /// </summary>
+        /// <returns>true if it is out of bounds, false otherwise</returns>
+        public bool IsOut()
+        {
+            Block tmp = Blocks[0];
+            return (tmp.Y + 3 * Constants.BLOCK_HEIGHT > Constants.WINDOW_HEIGHT);
+        }
+
+        /// <summary>
+        /// Method used when game is reseted, resets the row num to 0
+        /// </summary>
+        public static void ResetGame()
+        {
+            RowNum = 0;
+        }
     }
 }

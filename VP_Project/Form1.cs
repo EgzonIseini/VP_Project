@@ -142,6 +142,12 @@ namespace VP_Project
             _balls.checkBalls();
         }
 
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to start a new game?", "New Game", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                GenerateNewGame();
+        }
+
         // <------------------- HELPER METHODS ------------------>
         /// <summary>
         /// Method to move the blocks down when play ends
@@ -161,7 +167,11 @@ namespace VP_Project
             this.Refresh();
             timerDraw.Enabled = true;
             ballsToAdd++;
-
+            if (IsGameOver())
+            {
+                MessageBox.Show("GAME OVER");
+                GenerateNewGame();
+            }
         }
 
         /// <summary>
@@ -210,12 +220,42 @@ namespace VP_Project
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
             soundPlayer = new SoundPlayer(Properties.Resources.hitSound);
-            
+            Constants.WINDOW_HEIGHT = this.Height;
+            Constants.WINDOW_WIDTH = this.Width;
+
             ballBrush = new SolidBrush(Color.White);
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
             this.ballsToAdd = 1;
         }
+        
+        /// <summary>
+        /// Method to check whether game is over
+        /// </summary>
+        /// <returns>true if it is, false otherwise</returns>
+        private bool IsGameOver()
+        {
+            foreach (Row row in rows)
+            {
+                if (row.IsEmpty())
+                    continue;
+                return row.IsOut();
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Method to generate new game
+        /// </summary>
+        private void GenerateNewGame()
+        {
+            Row.ResetGame();
+            rows = new List<Row>();
+            rows.Add(new Row());
+            this.ballsToAdd = 1;
+        }
+
+
     }
 }
