@@ -217,6 +217,5 @@ namespace VP_Project
 
             this.ballsToAdd = 1;
         }
-
     }
 }

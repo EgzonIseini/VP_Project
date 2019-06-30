@@ -14,6 +14,7 @@ namespace VP_Project.Blocks
         public Color Color { get; set; }
         public int HP { get; set; }
         public bool exists; // whether the block still exists, will be used for drawing later
+        protected bool WasHitRecently;
         /// <remarks>
         /// Color is determined according to HP
         /// </remarks>
@@ -56,6 +57,7 @@ namespace VP_Project.Blocks
             {
                 exists = false;
             }
+            WasHitRecently = true;
         }
     }
 }

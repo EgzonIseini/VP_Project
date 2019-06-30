@@ -18,7 +18,10 @@ namespace VP_Project.Blocks
             StringFormat stringFormat = new StringFormat();
             stringFormat.Alignment = StringAlignment.Center;
             stringFormat.LineAlignment = StringAlignment.Center;
-            g.DrawString(HP + "", font, Brushes.Red, rec, stringFormat);
+            if (WasHitRecently)
+                g.DrawString(HP + "", font, Brushes.White, rec, stringFormat);
+            else
+                g.DrawString(HP + "", font, Brushes.Red, rec, stringFormat);
         }
 
         /// <summary>
@@ -28,7 +31,16 @@ namespace VP_Project.Blocks
         {
             RectangleF rec = new RectangleF(this.X, this.Y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
             DrawHP(g, rec);
-            g.DrawRectangle(pen, Rectangle.Round(rec));
+            if (WasHitRecently)
+            {
+                WasHitRecently = false;
+                g.FillRectangle(pen.Brush, Rectangle.Round(rec));
+            }
+            else
+            {
+                g.DrawRectangle(pen, Rectangle.Round(rec));
+            }
+            
         }
 
         public override void Draw(Graphics g)
