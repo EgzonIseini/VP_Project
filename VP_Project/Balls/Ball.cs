@@ -10,7 +10,6 @@ namespace VP_Project.Balls
 
     public class Ball
     {
-        public enum HitDirection { top, right, bottom, left, none }
         //radius of the ball
         public float r { get; set; }
         //color of the ball
@@ -26,58 +25,64 @@ namespace VP_Project.Balls
         private float velocityY;
         //if the ball hits the bottom of the form
         public bool BallDead { get; set; }
-
+        //Variable used to avoid multiple hits at the same time
         public bool HitOnce;
 
-        public Ball(Point Center, Color color, float Angle)
+        /// <summary>
+        /// Generate new ball
+        /// </summary>
+        /// <param name="Center">Center point of the ball</param>
+        /// <param name="Color">Color of the ball</param>
+        /// <param name="Angle">Angle of the movement in radians</param>
+        public Ball(Point Center, Color Color, float Angle)
         {
             this.r = Constants.BALL_RADIUS;
             this.Center = Center;
-            this.Color = color;
+            this.Color = Color;
             this.Speed = 10;
-            setDirection(Angle);
+            SetDirection(Angle);
         }
-        //set the direction of the ball
-        public void setDirection(float Angle)
+       
+        /// <summary>
+        /// Method to determine the x and y velocity of the ball
+        /// </summary>
+        /// <param name="Angle">Angle in radians</param>
+        public void SetDirection(float Angle)
         {
             this.Angle = Angle;
             this.velocityX = (float)(Math.Cos(Angle) * Speed);
             this.velocityY = (float)(Math.Sin(Angle) * Speed);
         }
-        //change the direction of the ball corresponding to the direction which it is hit
-        public void ChangeDirection(HitDirection dir)
-        {
-            float angle = this.Angle;
-            if (dir == HitDirection.left || dir == HitDirection.right)
-            {
-                this.velocityX = (-1) * this.velocityX;
-            }
-            else if (dir == HitDirection.top || dir == HitDirection.bottom)
-            {
-                this.velocityY = (-1) * this.velocityY;
-            }
 
-            this.setDirection(angle);
-        }
-
+        /// <summary>
+        /// Method to draw the ball
+        /// </summary>
         public void Draw(Graphics g, SolidBrush brush)
         {
             g.FillEllipse(brush, Center.X - r, Center.Y - r, 2 * r , 2 * r);
         }
         
-
+        /// <summary>
+        /// Helper method to find distance between a point o and line defined by points a and b
+        /// </summary>
+        /// <param name="o">Point in the problem</param>
+        /// <param name="a">First point of the line</param>
+        /// <param name="b">Second point of the line</param>
+        /// <returns>Distance between point and line</returns>
         private double DistanceToLine(PointF o, PointF a, PointF b)
         {
             return Math.Abs(((a.Y - b.Y) * o.X) - ((a.X - b.X) * o.Y) + a.X * b.Y - b.X * a.Y) 
                     / Math.Sqrt((a.Y - b.Y) * (a.Y - b.Y) + (a.X - b.X) * (a.X - b.X));
         }
 
-        public bool checkCollision(Blocks.Block block)
+        /// <summary>
+        /// Checks for collision between ball and block, and changes the behavior of the ball accordingly
+        /// </summary>
+        /// <param name="block">Block for which collision is checked</param>
+        /// <returns>true if collision was detected, false otherwise</returns>
+        public bool CheckCollision(Blocks.Block block)
         {
             //Points are labeled starting from the top-left corner and continuing clockwise
-
-
-            //return CheckCollision(block);
 
             PointF a = new PointF(block.X, block.Y);
             PointF b = new PointF(block.X + Constants.BLOCK_WIDTH, block.Y);
@@ -95,8 +100,6 @@ namespace VP_Project.Balls
             double d2 = DistanceToLine(Center, b, c);
             double d3 = DistanceToLine(Center, c, d);
             double d4 = DistanceToLine(Center, d, a);
-
-            //Console.WriteLine(string.Format("{0} {1} {2} {3}\n", d1, d2, d3, d4));
 
             bool WasHit = false;
             int x = this.Center.X, y = this.Center.Y;
@@ -137,7 +140,10 @@ namespace VP_Project.Balls
             }
             return WasHit;
         }
-
+        
+        /// <summary>
+        /// Moves the ball according to the game rules
+        /// </summary>
         public void Move()
         {
             int left = Constants.FORM_LEFT;

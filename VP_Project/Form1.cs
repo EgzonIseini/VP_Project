@@ -82,7 +82,7 @@ namespace VP_Project
                 {
                     foreach (Block block in row.Blocks)
                     {
-                        if (ball.checkCollision(block))
+                        if (ball.CheckCollision(block))
                             soundPlayer.Play();
                     }
                 }
@@ -143,7 +143,9 @@ namespace VP_Project
         }
 
         // <------------------- HELPER METHODS ------------------>
-
+        /// <summary>
+        /// Method to move the blocks down when play ends
+        /// </summary>
         private void MoveRowsDown()
         {
             timerDraw.Enabled = false;
@@ -162,6 +164,10 @@ namespace VP_Project
 
         }
 
+        /// <summary>
+        /// Method to throw the balls at given location
+        /// </summary>
+        /// <param name="location">Final location where the balls should be thrown at</param>
         private void ThrowBalls(Point location)
         {
             if (powerupType != 3)
@@ -174,12 +180,21 @@ namespace VP_Project
 
         }
 
+        /// <summary>
+        /// Method to calculate the angle given two points
+        /// </summary>
+        /// <param name="start">First Point</param>
+        /// <param name="arrival">Second Point</param>
+        /// <returns>Angle between start and arrival in radians</returns>
         private float GetAngle(Point start, Point arrival)
         {
             var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));             
             return (float) radian;
         }
 
+        /// <summary>
+        /// Method to initialize all the member variabless
+        /// </summary>
         private void InitGame()
         {
             timerDraw.Enabled = true;
