@@ -39,7 +39,7 @@ namespace VP_Project.Blocks
 					//if(randomPowerUp % 2 == 0) Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
 					//else Blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
 
-					Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT + 3, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, RowNum + 5));
+					Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT + 3, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, RowNum));
 				}
             }
         }
@@ -58,23 +58,7 @@ namespace VP_Project.Blocks
         }
 
         /// <summary>
-        /// Checks if any collision has happened and takes action accordingly
-        /// </summary>
-        /// <param name="X">X-coordinate of ball</param>
-        /// <param name="Y">Y-coordinate of ball</param>
-        /// <param name="BallPower">Power of Ball, default value 1</param>
-        public void CollisionsTest(float X, float Y, int BallPower = 1)
-        {
-            foreach (Block block in Blocks)
-            {
-                block.CollisionTest(X, Y, BallPower);
-            }
-
-        }
-
-
-        /// <summary>
-        /// Deletes blocks with HP <= 0 from the row.
+        /// Helper method to remove blocks with HP<=0 
         /// </summary>
         private void RemoveKilledBlocks()
         {
@@ -85,6 +69,9 @@ namespace VP_Project.Blocks
             }
         }
 
+        /// <summary>
+        /// Moves the blocks one row down
+        /// </summary>
         public void MoveRowDown()
         {
             foreach (Block block in Blocks)
@@ -92,7 +79,6 @@ namespace VP_Project.Blocks
                 block.Y = block.Y + Constants.BLOCK_MOVE_SPEED;
             }
         }
-
 
     }
 }

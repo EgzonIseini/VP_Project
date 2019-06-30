@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace VP_Project.Blocks
 {
@@ -14,6 +9,9 @@ namespace VP_Project.Blocks
         {
         }
 
+        /// <summary>
+        /// Helper method to draw the HP of each block
+        /// </summary>
         private void DrawHP(Graphics g, RectangleF rec)
         {
             Font font = new Font("Arial", 10, FontStyle.Bold, GraphicsUnit.Point);
@@ -23,6 +21,9 @@ namespace VP_Project.Blocks
             g.DrawString(HP + "", font, Brushes.Red, rec, stringFormat);
         }
 
+        /// <summary>
+        /// Helper method to draw the outline of a block
+        /// </summary>
         private void DrawBlock(Pen pen, Graphics g)
         {
             RectangleF rec = new RectangleF(this.X, this.Y, Constants.BLOCK_WIDTH, Constants.BLOCK_HEIGHT);
@@ -35,18 +36,6 @@ namespace VP_Project.Blocks
             Pen pen = new Pen(Color.Red, Constants.PEN_WIDTH);
             DrawBlock(pen, g);
             pen.Dispose();
-        }
-
-        public override void CollisionTest(float X, float Y, int BallPower = 1)
-        {
-            if ((Y >= this.Y && Y <= this.Y + Constants.BLOCK_HEIGHT) &&
-               ((X + Constants.BALL_RADIUS >= this.X) || (X - Constants.BALL_RADIUS <= this.X)))
-            {
-                WasHit(BallPower);
-            }
-            else if ((X >= this.X && X <= this.X + Constants.BLOCK_WIDTH) &&
-                    ((Y + Constants.BALL_RADIUS >= this.Y) || (Y - Constants.BALL_RADIUS <= this.Y)))
-                WasHit(BallPower);
         }
     }
 }

@@ -27,25 +27,9 @@ namespace VP_Project.Blocks
         }
 
         /// <summary>
-        /// Method to move the block down
-        /// </summary>
-        public void MoveDown()
-        {
-            
-        }
-
-        /// <summary>
         /// Method to draw the block
         /// </summary>
         public abstract void Draw(Graphics g);
-
-        /// <summary>
-        /// Method to check whether there is collision with this block
-        /// </summary>
-        /// <param name="X">X-Coordinate of ball</param>
-        /// <param name="Y">Y-Coordinate of ball</param>
-        /// <param name="BallPower">Power of the Ball, default 1</param>
-        public abstract void CollisionTest(float X, float Y, int BallPower = 1);
 
         /// <summary>
         /// Method to find the distance between ball and block
@@ -53,6 +37,7 @@ namespace VP_Project.Blocks
         /// <param name="X">X-Coordinate of ball</param>
         /// <param name="Y">Y-Coordinate of ball</param>
         /// <returns>Distance as float</returns>
+
         protected float GetDistance(float X, float Y)
         {
             return (float)Math.Sqrt((this.X - X) * (this.X - X) + (this.Y - Y) * (this.Y - Y));

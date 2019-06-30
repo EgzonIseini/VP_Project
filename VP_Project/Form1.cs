@@ -215,7 +215,7 @@ namespace VP_Project
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
-            this.ballsToAdd = 10;
+            this.ballsToAdd = 1;
         }
 
     }

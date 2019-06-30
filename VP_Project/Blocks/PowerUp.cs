@@ -39,16 +39,6 @@ namespace VP_Project.Blocks
 			if(type != 0) Image = new Bitmap(Constants.powerUpImages[type]);
 		}
 
-		public override void CollisionTest(float X, float Y, int BallPower = 1)
-		{
-			if (this.GetDistance(Collision, (int)X, (int)Y) <= 15 && this.Type != 0)
-			{
-				currentPowerup = this.Type;
-				this.Type = 0;
-			}
-			
-		}
-
 		public override void Draw(Graphics g)
 		{
 			if( Type != 0)
