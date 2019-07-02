@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Balls
 {
-
     public class Ball
     {
         //radius of the ball

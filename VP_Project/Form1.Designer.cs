@@ -91,6 +91,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Game";
             this.Text = "BBTan";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Game_FormClosing);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Game_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Game_MouseClick);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Game_MouseMove);

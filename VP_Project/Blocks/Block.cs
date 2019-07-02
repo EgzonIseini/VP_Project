@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Blocks
 {
+    [Serializable]
     public abstract class Block
     {
         public float X { get; set; }

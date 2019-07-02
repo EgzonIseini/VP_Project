@@ -4,6 +4,9 @@ using System.Drawing;
 using VP_Project.Blocks;
 using System.Windows.Forms;
 using System.Media;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace VP_Project
 {
@@ -12,27 +15,29 @@ namespace VP_Project
         // <------------------ MEMBER VARIABLES ---------------->
         private List<Row> rows;
 
-		// powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
-		// Can't have more than one powerup at a time. Initialized originally to 0.
-		private int powerupType;
-		
-		private static SolidBrush ballBrush;
+        // powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
+        // Can't have more than one powerup at a time. Initialized originally to 0.
+        private int powerupType;
 
-		private Timer ballsDraw;
+        private static SolidBrush ballBrush;
 
-		private Balls.BallStart ballStart;
+        private Timer ballsDraw;
 
-		private Point lastMouseLocation;
+        private Balls.BallStart ballStart;
 
-		private Balls.Balls _balls;
+        private Point lastMouseLocation;
 
-		private int ballsToAdd;
+        private Balls.Balls _balls;
+
+        private int ballsToAdd;
 
         private bool ShotWasTaken;
 
         private SoundPlayer hitSoundPlayer;
 
         private SoundPlayer powerUpSoundPlayer;
+
+        public object ApplicationData { get; private set; }
 
         // <--------------- FORM METHODS ---------------------->
 
@@ -62,7 +67,7 @@ namespace VP_Project
             e.Graphics.Clear(Color.DimGray);
 
             DrawLine(e.Graphics);
-            
+
             DrawRows(e.Graphics);
 
             DrawBalls(e.Graphics);
@@ -102,6 +107,19 @@ namespace VP_Project
         {
             if (MessageBox.Show("Are you sure you want to start a new game?", "New Game", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 GenerateNewGame();
+        }
+
+        private void Game_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                SaveGame();
+            }
+            catch (Exception)
+            {
+                //Do nothing
+            }
+
         }
 
         // <------------------- HELPER METHODS ------------------>
@@ -154,8 +172,8 @@ namespace VP_Project
         /// <returns>Angle between start and arrival in radians</returns>
         private float GetAngle(Point start, Point arrival)
         {
-            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));             
-            return (float) radian;
+            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
+            return (float)radian;
         }
 
         /// <summary>
@@ -165,13 +183,12 @@ namespace VP_Project
         {
             timerDraw.Enabled = true;
             timerDraw.Interval = Constants.TIMER_60_FPS;
-            rows = new List<Row>();
-            rows.Add(new Row());
+            OpenPreviousGame();
             this.powerupType = 0;
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.ballsDraw = new Timer();   
+            this.ballsDraw = new Timer();
             ballsDraw.Interval = 32;
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
@@ -183,10 +200,8 @@ namespace VP_Project
             ballBrush = new SolidBrush(Color.White);
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
-
-            this.ballsToAdd = 1;
         }
-        
+
         /// <summary>
         /// Method to check whether game is over
         /// </summary>
@@ -264,7 +279,7 @@ namespace VP_Project
                             hitSoundPlayer.Play();
                         //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
                         //Call powerUpPlayer's Play method accordingly
-                     }
+                    }
                 }
             }
         }
@@ -281,5 +296,49 @@ namespace VP_Project
             Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
             g.DrawLine(blackPen, newPoint, lastMouseLocation);
         }
+
+        /// <summary>
+        /// Method to save game
+        /// </summary>
+        private void SaveGame()
+        {
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "last_game.bb");
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                fileStream.Position = 0;
+                formatter.Serialize(fileStream, rows);
+            }
+        }
+
+        /// <summary>
+        /// Method to open game if previously saved
+        /// </summary>
+        private void OpenPreviousGame()
+        {
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "last_game.bb");
+            Console.WriteLine(fileName);
+            try
+            {
+                using(FileStream fileStream = new FileStream(fileName, FileMode.Open))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    rows = (List<Row>) formatter.Deserialize(fileStream);
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (rows == null || rows.Count == 0)
+            {
+                GenerateNewGame();
+            }
+            else if (rows.Count != 0)
+            {
+                ballsToAdd = rows.Count;
+                Row.SetRowNum(ballsToAdd);
+            }
+        }
+
     }
 }

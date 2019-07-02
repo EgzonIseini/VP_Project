@@ -10,7 +10,8 @@ using System.Diagnostics;
 
 namespace VP_Project.Blocks
 {
-	public enum PowerupType
+    [Serializable]
+    public enum PowerupType
 	{
 		None = 0,
 		ExtraPoints = 1,
@@ -18,8 +19,8 @@ namespace VP_Project.Blocks
 		DoubleBalls = 3,
 		FINKI = 4
 	}
-
-	public class PowerUp : Block
+    [Serializable]
+    public class PowerUp : Block
     {
 		public static int currentPowerup = 0;
 

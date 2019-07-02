@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+
 
 namespace VP_Project.Blocks
 {
+    [Serializable]
     public class SquareBlock : Block
     {
-
         public SquareBlock(float X, float Y, int HP) : base(X, Y, HP)
         {
         }
