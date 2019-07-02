@@ -30,7 +30,9 @@ namespace VP_Project
 
         private bool ShotWasTaken;
 
-        private SoundPlayer soundPlayer;
+        private SoundPlayer hitSoundPlayer;
+
+        private SoundPlayer powerUpSoundPlayer;
 
         // <--------------- FORM METHODS ---------------------->
 
@@ -173,7 +175,8 @@ namespace VP_Project
             ballsDraw.Interval = 32;
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
-            soundPlayer = new SoundPlayer(Properties.Resources.hitSound);
+            hitSoundPlayer = new SoundPlayer(Properties.Resources.hitSound);
+            powerUpSoundPlayer = new SoundPlayer(Properties.Resources.powerUpSound);
             Constants.WINDOW_HEIGHT = this.Height;
             Constants.WINDOW_WIDTH = this.Width;
 
@@ -258,9 +261,10 @@ namespace VP_Project
                     foreach (Block block in row.Blocks)
                     {
                         if (ball.CheckCollision(block) == 0)
-                            soundPlayer.Play();
+                            hitSoundPlayer.Play();
                         //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
-                    }
+                        //Call powerUpPlayer's Play method accordingly
+                     }
                 }
             }
         }
