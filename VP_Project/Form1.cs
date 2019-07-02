@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VP_Project.Blocks;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Media;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace VP_Project
 {
@@ -18,29 +15,33 @@ namespace VP_Project
         // <------------------ MEMBER VARIABLES ---------------->
         private List<Row> rows;
 
-		// powerupType is equals to the powerupTypes. IF its 0 then player has no powerups!
-		// Can't have more than one powerup at a time. Initialized originally to 0.
-		public static List<Int32> powerups { get; set; }
-		
-		private static SolidBrush ballBrush;
+        // powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
+        // Can't have more than one powerup at a time. Initialized originally to 0.
+        private int powerupType;
 
-		private Timer ballsDraw;
+        private static SolidBrush ballBrush;
 
-		private Balls.BallStart ballStart;
+        private Timer ballsDraw;
 
-		private Point lastMouseLocation;
+        private Balls.BallStart ballStart;
 
-		private Balls.Balls _balls;
+        private Point lastMouseLocation;
 
-		private int ballsToAdd;
+        private Balls.Balls _balls;
+
+        private int ballsToAdd;
 
         private bool ShotWasTaken;
 
-        private SoundPlayer soundPlayer;
+        private SoundPlayer hitSoundPlayer;
 
-		// <--------------- FORM METHODS ---------------------->
+        private SoundPlayer powerUpSoundPlayer;
 
-		public Game()
+        public object ApplicationData { get; private set; }
+
+        // <--------------- FORM METHODS ---------------------->
+
+        public Game()
         {
             InitializeComponent();
             InitGame();
@@ -57,61 +58,19 @@ namespace VP_Project
             {
                 ThrowBalls(e.Location);
             }
+            powerupType = PowerUp.currentPowerup;
+            Invalidate(true);
         }
 
         private void Game_Paint(object sender, PaintEventArgs e)
         {
-            // This is the first line which sets the canvas for painting. Only use this
-            // to initalize the canvas i.e. set color, size etc.
             e.Graphics.Clear(Color.DimGray);
 
-            Brush black = new SolidBrush(Color.Black);
-            Pen blackPen = new Pen(black, 3);
-            blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            DrawLine(e.Graphics);
 
+            DrawRows(e.Graphics);
 
-            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
-            e.Graphics.DrawLine(blackPen, newPoint, lastMouseLocation);
-
-            foreach (Balls.Ball ball in this._balls.allBalls)
-            {
-                ball.HitOnce = false;
-                foreach (Row row in rows)
-                {
-                    foreach (Block block in row.Blocks)
-                    {
-                        if (ball.CheckCollision(block) > 0)
-                            soundPlayer.Play();
-                    }
-                }
-            }
-
-            // An other type of drawing goes below this comment.
-            foreach (Row row in rows)
-            {
-                row.DrawBlocks(e.Graphics);
-            }
-
-            _balls.Draw(e.Graphics);
-
-            if (_balls.allBalls.Count == 0)
-            {
-                ballStart.Draw(ballsToAdd * Constants.ballMultiplier, e.Graphics);
-                if (ShotWasTaken)
-                {
-                    ShotWasTaken = false;
-
-					//Round has finished. Resetting powerups.
-					ResetPowerups();
-
-					MoveRowsDown();
-                }
-            }
-            else
-            { 
-                ballStart.Draw(_balls.ballsLeft, e.Graphics);
-                ShotWasTaken = true;
-            }
+            DrawBalls(e.Graphics);
         }
 
         private void ballAdder_Tick(object sender, EventArgs e)
@@ -150,40 +109,18 @@ namespace VP_Project
                 GenerateNewGame();
         }
 
-		private void Powerup()
-		{	
-			for(int i = 0; i < powerups.Count; i++)
-			{
-				// ---- Set powerup multipliers.
-				int powerup = powerups.ElementAt(i);
+        private void Game_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                SaveGame();
+            }
+            catch (Exception)
+            {
+                //Do nothing
+            }
 
-				switch (powerup)
-				{
-					case 1: ballsToAdd++; break;
-					case 2: Constants.scoreMultiplier++; break;
-					case 3: Constants.damageMultiplier++; break;
-					case 4: Constants.ballMultiplier++; break;
-				}
-			}
-
-			if (Constants.scoreMultiplier != 1) scoreMultiplierLabel.Text = String.Format("Score Mult: {0}", Constants.scoreMultiplier);
-			else scoreMultiplierLabel.Text = "";
-
-			if (Constants.damageMultiplier != 1) damageMultiplierLabel.Text = String.Format("Damage Mult: {0}", Constants.damageMultiplier);
-			else damageMultiplierLabel.Text = "";
-
-			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult: {0}", Constants.ballMultiplier);
-			else ballMultiplierLabel.Text = "";
-
-			// Clear pwoerup array for next use.
-			powerups.Clear();
-		}
-
-		private void ResetPowerups()
-		{
-			Constants.scoreMultiplier = 1;
-			Constants.damageMultiplier = 1;
-		}
+        }
 
         // <------------------- HELPER METHODS ------------------>
         /// <summary>
@@ -191,8 +128,7 @@ namespace VP_Project
         /// </summary>
         private void MoveRowsDown()
         {
-			//Activate any powerup.
-			timerDraw.Enabled = false;
+            timerDraw.Enabled = false;
             for (float f = 0; f < Constants.BLOCK_HEIGHT; f += Constants.BLOCK_MOVE_SPEED)
             {
                 foreach (Row row in rows)
@@ -204,13 +140,13 @@ namespace VP_Project
             rows.Add(new Row());
             this.Refresh();
             timerDraw.Enabled = true;
+            ballsToAdd++;
             if (IsGameOver())
             {
                 MessageBox.Show("GAME OVER");
                 GenerateNewGame();
             }
-			Powerup();
-		}
+        }
 
         /// <summary>
         /// Method to throw the balls at given location
@@ -218,8 +154,14 @@ namespace VP_Project
         /// <param name="location">Final location where the balls should be thrown at</param>
         private void ThrowBalls(Point location)
         {
-			_balls = new Balls.Balls(ballsToAdd * Constants.ballMultiplier, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
-			Constants.ballMultiplier = 1;
+            if (powerupType != 3)
+                _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
+            else
+            {
+                _balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
+                powerupType = 0;
+            }
+
         }
 
         /// <summary>
@@ -230,8 +172,8 @@ namespace VP_Project
         /// <returns>Angle between start and arrival in radians</returns>
         private float GetAngle(Point start, Point arrival)
         {
-            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));             
-            return (float) radian;
+            var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
+            return (float)radian;
         }
 
         /// <summary>
@@ -239,34 +181,27 @@ namespace VP_Project
         /// </summary>
         private void InitGame()
         {
-			powerups = new List<int>();
             timerDraw.Enabled = true;
             timerDraw.Interval = Constants.TIMER_60_FPS;
-            rows = new List<Row>();
-            rows.Add(new Row());
+            OpenPreviousGame();
+            this.powerupType = 0;
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.ballsDraw = new Timer();   
-            ballsDraw.Interval = 28;
+            this.ballsDraw = new Timer();
+            ballsDraw.Interval = 32;
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
-            soundPlayer = new SoundPlayer(Properties.Resources.hitSound);
+            hitSoundPlayer = new SoundPlayer(Properties.Resources.hitSound);
+            powerUpSoundPlayer = new SoundPlayer(Properties.Resources.powerUpSound);
             Constants.WINDOW_HEIGHT = this.Height;
             Constants.WINDOW_WIDTH = this.Width;
 
             ballBrush = new SolidBrush(Color.White);
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
+        }
 
-            this.ballsToAdd = 1;
-			
-			scoreMultiplierLabel.Text = "";
-			damageMultiplierLabel.Text = "";
-			ballMultiplierLabel.Text = "";
-			scoreLabel.Text = "Score: 0";
-		}
-        
         /// <summary>
         /// Method to check whether game is over
         /// </summary>
@@ -292,5 +227,118 @@ namespace VP_Project
             rows.Add(new Row());
             this.ballsToAdd = 1;
         }
+
+        /// <summary>
+        /// Method to draw the rows, before that it calls CollisionDetection
+        /// </summary>
+        private void DrawRows(Graphics g)
+        {
+            CollisionDetection();
+            foreach (Row row in rows)
+            {
+                row.DrawBlocks(g);
+            }
+        }
+
+        /// <summary>
+        /// Method to draw the balls
+        /// </summary>
+        private void DrawBalls(Graphics g)
+        {
+            _balls.Draw(g);
+
+            if (_balls.allBalls.Count == 0)
+            {
+                ballStart.Draw(ballsToAdd, g);
+                if (ShotWasTaken)
+                {
+                    ShotWasTaken = false;
+                    MoveRowsDown();
+                }
+            }
+            else
+            {
+                ballStart.Draw(_balls.ballsLeft, g);
+                ShotWasTaken = true;
+            }
+        }
+
+        /// <summary>
+        /// Method where the effects of collisions are taken care of
+        /// </summary>
+        private void CollisionDetection()
+        {
+            foreach (Balls.Ball ball in this._balls.allBalls)
+            {
+                ball.HitOnce = false;
+                foreach (Row row in rows)
+                {
+                    foreach (Block block in row.Blocks)
+                    {
+                        if (ball.CheckCollision(block) == 0)
+                            hitSoundPlayer.Play();
+                        //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
+                        //Call powerUpPlayer's Play method accordingly
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to draw the dotted line
+        /// </summary>
+        private void DrawLine(Graphics g)
+        {
+            Brush black = new SolidBrush(Color.Black);
+            Pen blackPen = new Pen(black, 3);
+            blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
+            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
+            g.DrawLine(blackPen, newPoint, lastMouseLocation);
+        }
+
+        /// <summary>
+        /// Method to save game
+        /// </summary>
+        private void SaveGame()
+        {
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "last_game.bb");
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+            {
+                IFormatter formatter = new BinaryFormatter();
+                fileStream.Position = 0;
+                formatter.Serialize(fileStream, rows);
+            }
+        }
+
+        /// <summary>
+        /// Method to open game if previously saved
+        /// </summary>
+        private void OpenPreviousGame()
+        {
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "last_game.bb");
+            Console.WriteLine(fileName);
+            try
+            {
+                using(FileStream fileStream = new FileStream(fileName, FileMode.Open))
+                {
+                    IFormatter formatter = new BinaryFormatter();
+                    rows = (List<Row>) formatter.Deserialize(fileStream);
+                }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            if (rows == null || rows.Count == 0)
+            {
+                GenerateNewGame();
+            }
+            else if (rows.Count != 0)
+            {
+                ballsToAdd = rows.Count;
+                Row.SetRowNum(ballsToAdd);
+            }
+        }
+
     }
 }
