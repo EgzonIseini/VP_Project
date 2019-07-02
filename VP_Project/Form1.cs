@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VP_Project.Blocks;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Media;
 
 namespace VP_Project
@@ -63,54 +57,13 @@ namespace VP_Project
 
         private void Game_Paint(object sender, PaintEventArgs e)
         {
-            // This is the first line which sets the canvas for painting. Only use this
-            // to initalize the canvas i.e. set color, size etc.
             e.Graphics.Clear(Color.DimGray);
 
-            Brush black = new SolidBrush(Color.Black);
-            Pen blackPen = new Pen(black, 3);
-            blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            DrawLine(e.Graphics);
+            
+            DrawRows(e.Graphics);
 
-
-            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
-            e.Graphics.DrawLine(blackPen, newPoint, lastMouseLocation);
-
-            foreach (Balls.Ball ball in this._balls.allBalls)
-            {
-                ball.HitOnce = false;
-                foreach (Row row in rows)
-                {
-                    foreach (Block block in row.Blocks)
-                    {
-                        if (ball.CheckCollision(block) == 0)
-                            soundPlayer.Play();
-                        //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
-                    }
-                }
-            }
-
-            // An other type of drawing goes below this comment.
-            foreach (Row row in rows)
-            {
-                row.DrawBlocks(e.Graphics);
-            }
-
-            _balls.Draw(e.Graphics);
-
-            if (_balls.allBalls.Count == 0)
-            {
-                ballStart.Draw(ballsToAdd, e.Graphics);
-                if (ShotWasTaken)
-                {
-                    ShotWasTaken = false;
-                    MoveRowsDown();
-                }
-            }
-            else
-            { 
-                ballStart.Draw(_balls.ballsLeft, e.Graphics);
-                ShotWasTaken = true;
-            }
+            DrawBalls(e.Graphics);
         }
 
         private void ballAdder_Tick(object sender, EventArgs e)
@@ -257,6 +210,72 @@ namespace VP_Project
             this.ballsToAdd = 1;
         }
 
+        /// <summary>
+        /// Method to draw the rows, before that it calls CollisionDetection
+        /// </summary>
+        private void DrawRows(Graphics g)
+        {
+            CollisionDetection();
+            foreach (Row row in rows)
+            {
+                row.DrawBlocks(g);
+            }
+        }
 
+        /// <summary>
+        /// Method to draw the balls
+        /// </summary>
+        private void DrawBalls(Graphics g)
+        {
+            _balls.Draw(g);
+
+            if (_balls.allBalls.Count == 0)
+            {
+                ballStart.Draw(ballsToAdd, g);
+                if (ShotWasTaken)
+                {
+                    ShotWasTaken = false;
+                    MoveRowsDown();
+                }
+            }
+            else
+            {
+                ballStart.Draw(_balls.ballsLeft, g);
+                ShotWasTaken = true;
+            }
+        }
+
+        /// <summary>
+        /// Method where the effects of collisions are taken care of
+        /// </summary>
+        private void CollisionDetection()
+        {
+            foreach (Balls.Ball ball in this._balls.allBalls)
+            {
+                ball.HitOnce = false;
+                foreach (Row row in rows)
+                {
+                    foreach (Block block in row.Blocks)
+                    {
+                        if (ball.CheckCollision(block) == 0)
+                            soundPlayer.Play();
+                        //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method to draw the dotted line
+        /// </summary>
+        private void DrawLine(Graphics g)
+        {
+            Brush black = new SolidBrush(Color.Black);
+            Pen blackPen = new Pen(black, 3);
+            blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+
+            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
+            g.DrawLine(blackPen, newPoint, lastMouseLocation);
+        }
     }
 }
