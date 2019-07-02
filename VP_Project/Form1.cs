@@ -82,8 +82,9 @@ namespace VP_Project
                 {
                     foreach (Block block in row.Blocks)
                     {
-                        if (ball.CheckCollision(block))
+                        if (ball.CheckCollision(block) == 0)
                             soundPlayer.Play();
+                        //TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
                     }
                 }
             }

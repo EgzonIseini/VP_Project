@@ -52,5 +52,11 @@ namespace VP_Project.Blocks
 		{
 			return (int)Math.Sqrt((powerup.X - X) * (powerup.X - X) + (powerup.Y - Y) * (powerup.Y - Y));
 		}
-	}
+
+        public override int WasHit(int amount = 1)
+        {
+            DeductHP(amount);
+            return Type;
+        }
+    }
 }

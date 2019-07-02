@@ -49,5 +49,11 @@ namespace VP_Project.Blocks
             DrawBlock(pen, g);
             pen.Dispose();
         }
+
+        public override int WasHit(int amount = 1)
+        {
+            DeductHP(amount);
+            return 0;
+        }
     }
 }
