@@ -80,7 +80,7 @@ namespace VP_Project
                 {
                     foreach (Block block in row.Blocks)
                     {
-                        if (ball.CheckCollision(block))
+                        if (ball.CheckCollision(block) > 0)
                             soundPlayer.Play();
                     }
                 }
@@ -96,7 +96,7 @@ namespace VP_Project
 
             if (_balls.allBalls.Count == 0)
             {
-                ballStart.Draw(ballsToAdd, e.Graphics);
+                ballStart.Draw(ballsToAdd * Constants.ballMultiplier, e.Graphics);
                 if (ShotWasTaken)
                 {
                     ShotWasTaken = false;

@@ -54,6 +54,9 @@ namespace VP_Project.Blocks
 
         public override int WasHit(int amount = 1)
         {
+			//Increase score for every hit.
+			Constants.currentScore += amount * Constants.damageMultiplier * Constants.scoreMultiplier;
+
             DeductHP(amount);
             return 0;
         }
