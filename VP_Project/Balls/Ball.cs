@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Balls
 {
-
     public class Ball
     {
         //radius of the ball
@@ -79,8 +78,8 @@ namespace VP_Project.Balls
         /// Checks for collision between ball and block, and changes the behavior of the ball accordingly
         /// </summary>
         /// <param name="block">Block for which collision is checked</param>
-        /// <returns>true if collision was detected, false otherwise</returns>
-        public bool CheckCollision(Blocks.Block block)
+        /// <returns>The type of block hit, if no block is hit -1 is returned</returns>
+        public int CheckCollision(Blocks.Block block)
         {
             //Points are labeled starting from the top-left corner and continuing clockwise
 
@@ -134,13 +133,13 @@ namespace VP_Project.Balls
                 WasHit = true;
             }  
 
-            if (WasHit) { 
-                block.WasHit();
+            if (WasHit) {
                 HitOnce = true;
                 Move();
                 Center = new Point(x, y);
+                return block.WasHit();
             }
-            return WasHit;
+            return -1;
         }
         
         /// <summary>

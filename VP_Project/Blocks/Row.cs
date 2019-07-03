@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Blocks
 {
+    [Serializable]
     public class Row
     {
         public List<Block> Blocks { get; }
@@ -113,6 +114,14 @@ namespace VP_Project.Blocks
         public static void ResetGame()
         {
             RowNum = 0;
+        }
+
+        /// <summary>
+        /// Method used for getting the ordered number of row
+        /// </summary>
+        public static int SetRowNum(int n)
+        {
+            return RowNum = n;
         }
     }
 }

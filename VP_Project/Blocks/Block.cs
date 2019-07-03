@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace VP_Project.Blocks
 {
+    [Serializable]
     public abstract class Block
     {
         public float X { get; set; }
@@ -44,13 +45,20 @@ namespace VP_Project.Blocks
             return (float)Math.Sqrt((this.X - X) * (this.X - X) + (this.Y - Y) * (this.Y - Y));
 
         }
+        
+        /// <summary>
+        /// Return 
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        public abstract int WasHit(int amount = 1);
 
         /// <summary>
-        /// Method invoked when block is hit
+        /// Internal method invoked when block is hit
         /// It should decrease the HP by the amount provided as arg
         /// Default val is 1
         /// </summary>
-        public void WasHit(int amount = 1)
+        protected void DeductHP(int amount = 1)
         {
             HP -= amount * Constants.damageMultiplier;
             if (HP <= 0)

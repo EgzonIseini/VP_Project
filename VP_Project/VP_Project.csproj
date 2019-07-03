@@ -92,6 +92,7 @@
     <None Include="Resources\ball.png" />
     <Content Include="Resources\coin.png" />
     <Content Include="Resources\hitSound.wav" />
+    <Content Include="Resources\powerUpSound.wav" />
     <None Include="Resources\doubledmg.png" />
     <None Include="Resources\doubleball.png" />
     <Content Include="Resources\finki.png" />

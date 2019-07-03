@@ -1,10 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+
 
 namespace VP_Project.Blocks
 {
+    [Serializable]
     public class SquareBlock : Block
     {
-
         public SquareBlock(float X, float Y, int HP) : base(X, Y, HP)
         {
         }
@@ -48,6 +50,12 @@ namespace VP_Project.Blocks
             Pen pen = new Pen(Color.Red, Constants.PEN_WIDTH);
             DrawBlock(pen, g);
             pen.Dispose();
+        }
+
+        public override int WasHit(int amount = 1)
+        {
+            DeductHP(amount);
+            return 0;
         }
     }
 }

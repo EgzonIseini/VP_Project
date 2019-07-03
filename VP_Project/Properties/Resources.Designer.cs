@@ -118,5 +118,14 @@ namespace VP_Project.Properties {
                 return ResourceManager.GetStream("hitSound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream powerUpSound {
+            get {
+                return ResourceManager.GetStream("powerUpSound", resourceCulture);
+            }
+        }
     }
 }

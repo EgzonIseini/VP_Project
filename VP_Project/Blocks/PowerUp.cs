@@ -10,7 +10,8 @@ using System.Diagnostics;
 
 namespace VP_Project.Blocks
 {
-	public enum PowerupType
+    [Serializable]
+    public enum PowerupType
 	{
 		None = 0,
 		AddBall = 1,
@@ -19,8 +20,8 @@ namespace VP_Project.Blocks
 		DoubleBalls = 4,
 		FINKI = 5
 	}
-
-	public class PowerUp : Block
+    [Serializable]
+    public class PowerUp : Block
     {
 		public int Type { get; set; }
 
@@ -62,5 +63,11 @@ namespace VP_Project.Blocks
 		{
 			return (int)Math.Sqrt((powerup.X - X) * (powerup.X - X) + (powerup.Y - Y) * (powerup.Y - Y));
 		}
-	}
+
+        public override int WasHit(int amount = 1)
+        {
+            DeductHP(amount);
+            return Type;
+        }
+    }
 }
