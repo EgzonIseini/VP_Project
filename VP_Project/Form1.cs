@@ -18,9 +18,9 @@ namespace VP_Project
         // <------------------ MEMBER VARIABLES ---------------->
         private List<Row> rows;
 
-		// powerupType is equals to the powerupTypes. IF 0 => player has no powerups!
+		// powerupType is equals to the powerupTypes. IF its 0 then player has no powerups!
 		// Can't have more than one powerup at a time. Initialized originally to 0.
-		private int powerupType;
+		public static List<Int32> powerups { get; set; }
 		
 		private static SolidBrush ballBrush;
 
@@ -38,9 +38,9 @@ namespace VP_Project
 
         private SoundPlayer soundPlayer;
 
-        // <--------------- FORM METHODS ---------------------->
+		// <--------------- FORM METHODS ---------------------->
 
-        public Game()
+		public Game()
         {
             InitializeComponent();
             InitGame();
@@ -57,8 +57,6 @@ namespace VP_Project
             {
                 ThrowBalls(e.Location);
             }
-            powerupType = PowerUp.currentPowerup;
-            Invalidate(true);
         }
 
         private void Game_Paint(object sender, PaintEventArgs e)
@@ -102,7 +100,11 @@ namespace VP_Project
                 if (ShotWasTaken)
                 {
                     ShotWasTaken = false;
-                    MoveRowsDown();
+
+					//Round has finished. Resetting powerups.
+					ResetPowerups();
+
+					MoveRowsDown();
                 }
             }
             else
@@ -148,13 +150,49 @@ namespace VP_Project
                 GenerateNewGame();
         }
 
+		private void Powerup()
+		{	
+			for(int i = 0; i < powerups.Count; i++)
+			{
+				// ---- Set powerup multipliers.
+				int powerup = powerups.ElementAt(i);
+
+				switch (powerup)
+				{
+					case 1: ballsToAdd++; break;
+					case 2: Constants.scoreMultiplier++; break;
+					case 3: Constants.damageMultiplier++; break;
+					case 4: Constants.ballMultiplier++; break;
+				}
+			}
+
+			if (Constants.scoreMultiplier != 1) scoreMultiplierLabel.Text = String.Format("Score Mult: {0}", Constants.scoreMultiplier);
+			else scoreMultiplierLabel.Text = "";
+
+			if (Constants.damageMultiplier != 1) damageMultiplierLabel.Text = String.Format("Damage Mult: {0}", Constants.damageMultiplier);
+			else damageMultiplierLabel.Text = "";
+
+			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult: {0}", Constants.ballMultiplier);
+			else ballMultiplierLabel.Text = "";
+
+			// Clear pwoerup array for next use.
+			powerups.Clear();
+		}
+
+		private void ResetPowerups()
+		{
+			Constants.scoreMultiplier = 1;
+			Constants.damageMultiplier = 1;
+		}
+
         // <------------------- HELPER METHODS ------------------>
         /// <summary>
         /// Method to move the blocks down when play ends
         /// </summary>
         private void MoveRowsDown()
         {
-            timerDraw.Enabled = false;
+			//Activate any powerup.
+			timerDraw.Enabled = false;
             for (float f = 0; f < Constants.BLOCK_HEIGHT; f += Constants.BLOCK_MOVE_SPEED)
             {
                 foreach (Row row in rows)
@@ -166,13 +204,13 @@ namespace VP_Project
             rows.Add(new Row());
             this.Refresh();
             timerDraw.Enabled = true;
-            ballsToAdd++;
             if (IsGameOver())
             {
                 MessageBox.Show("GAME OVER");
                 GenerateNewGame();
             }
-        }
+			Powerup();
+		}
 
         /// <summary>
         /// Method to throw the balls at given location
@@ -180,14 +218,8 @@ namespace VP_Project
         /// <param name="location">Final location where the balls should be thrown at</param>
         private void ThrowBalls(Point location)
         {
-            if (powerupType != 3)
-                _balls = new Balls.Balls(ballsToAdd, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
-            else
-            {
-                _balls = new Balls.Balls(ballsToAdd * 2, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
-                powerupType = 0;
-            }
-
+			_balls = new Balls.Balls(ballsToAdd * Constants.ballMultiplier, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
+			Constants.ballMultiplier = 1;
         }
 
         /// <summary>
@@ -207,16 +239,16 @@ namespace VP_Project
         /// </summary>
         private void InitGame()
         {
+			powerups = new List<int>();
             timerDraw.Enabled = true;
             timerDraw.Interval = Constants.TIMER_60_FPS;
             rows = new List<Row>();
             rows.Add(new Row());
-            this.powerupType = 0;
             this.DoubleBuffered = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.ballsDraw = new Timer();   
-            ballsDraw.Interval = 32;
+            ballsDraw.Interval = 28;
             ballsDraw.Tick += new EventHandler(timerDraw_Tick);
             ballsDraw.Start();
             soundPlayer = new SoundPlayer(Properties.Resources.hitSound);
@@ -228,7 +260,12 @@ namespace VP_Project
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
             this.ballsToAdd = 1;
-        }
+			
+			scoreMultiplierLabel.Text = "";
+			damageMultiplierLabel.Text = "";
+			ballMultiplierLabel.Text = "";
+			scoreLabel.Text = "Score: 0";
+		}
         
         /// <summary>
         /// Method to check whether game is over
@@ -255,7 +292,5 @@ namespace VP_Project
             rows.Add(new Row());
             this.ballsToAdd = 1;
         }
-
-
     }
 }

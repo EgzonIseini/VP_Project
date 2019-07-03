@@ -89,6 +89,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ball.png" />
     <Content Include="Resources\coin.png" />
     <Content Include="Resources\hitSound.wav" />
     <None Include="Resources\doubledmg.png" />

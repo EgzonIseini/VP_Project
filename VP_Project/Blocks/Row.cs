@@ -39,7 +39,15 @@ namespace VP_Project.Blocks
 					//if(randomPowerUp % 2 == 0) Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, 0F + Constants.FORM_TOP, RowNum));
 					//else Blocks.Add(new PowerUp((int)i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT, (int)0F + Constants.FORM_TOP, type));
 
-					Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT + 3, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, RowNum));
+					if( current == 1 )
+					{
+						int powerupType = Constants.RANDOM.Next(1, 5);
+						Blocks.Add(new PowerUp(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT + 3, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, powerupType));
+					}
+					else
+					{
+						Blocks.Add(new SquareBlock(i * Constants.BLOCK_WIDTH + Constants.FORM_LEFT + 3, Constants.BLOCK_HEIGHT + Constants.FORM_TOP, RowNum));
+					}
 				}
             }
         }

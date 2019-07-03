@@ -13,16 +13,15 @@ namespace VP_Project.Blocks
 	public enum PowerupType
 	{
 		None = 0,
-		ExtraPoints = 1,
-		DoubleDamage = 2,
-		DoubleBalls = 3,
-		FINKI = 4
+		AddBall = 1,
+		ExtraPoints = 2,
+		DoubleDamage = 3,
+		DoubleBalls = 4,
+		FINKI = 5
 	}
 
 	public class PowerUp : Block
     {
-		public static int currentPowerup = 0;
-
 		public int Type { get; set; }
 
 		public Point Center { get; set; }
@@ -38,6 +37,9 @@ namespace VP_Project.Blocks
 			Type = type;
 			if(type != 0) Image = new Bitmap(Constants.powerUpImages[type]);
 		}
+	
+		public PowerUp(int X, int Y, PowerupType powerup) : this(X, Y, (int)powerup)
+		{ }
 
 		public override void Draw(Graphics g)
 		{
@@ -46,6 +48,14 @@ namespace VP_Project.Blocks
 				Point center = new Point((int)this.X, (int)this.Y);
 				g.DrawImage(Image, center);
 			}
+		}
+
+		/// <summary>
+		///	Called from Block class.
+		/// </summary>
+		public void PowerupHit()
+		{
+			Game.powerups.Add(Type);
 		}
 
 		private int GetDistance(Point powerup, int X, int Y)

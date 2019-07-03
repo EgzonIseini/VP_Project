@@ -104,31 +104,33 @@ namespace VP_Project.Balls
             bool WasHit = false;
             int x = this.Center.X, y = this.Center.Y;
 
+			bool isSquareBlock = (block is Blocks.SquareBlock);
+
             if (d1 <= r && Center.X + r >= a.X && Center.X - r <= b.X)
             {
                 //Ball hit the top side
-                this.velocityY = -Math.Abs(this.velocityY);
+                if(isSquareBlock) this.velocityY = -Math.Abs(this.velocityY);
                 WasHit = true;
             }
 
             if (d2 <= r && Center.Y + r >= b.Y && Center.Y - r <= c.Y)
             {
-                //Ball hit the right side
-                this.velocityX = Math.Abs(this.velocityX);
+				//Ball hit the right side
+				if (isSquareBlock) this.velocityX = Math.Abs(this.velocityX);
                // x += (int)(Constants.DELTA + r);
                 WasHit = true;
             }
 
             if (d3 <= r && Center.X + r >= a.X && Center.X - r <= b.X)
             {
-                //Ball hit the bottom side
-                this.velocityY = Math.Abs(this.velocityY);
+				//Ball hit the bottom side
+				if (isSquareBlock) this.velocityY = Math.Abs(this.velocityY);
                 WasHit = true;
             }
             if (d4 <= r && Center.Y + r >= b.Y && Center.Y - r <= c.Y)
             {
-                //Ball hit the left side
-                this.velocityX = -Math.Abs(this.velocityX);
+				//Ball hit the left side
+				if (isSquareBlock) this.velocityX = -Math.Abs(this.velocityX);
                 WasHit = true;
             }  
 
@@ -156,6 +158,10 @@ namespace VP_Project.Balls
             if (nextX <= left || nextX -8*r >= width + left)
             {
                 velocityX = -velocityX;
+
+				// Slows the vertical speed of the balls, so they gradually start falling down
+				// instead of going left-right endlessly.
+				velocityY += 0.15F;
             }
             if (nextY + r >= height + top)
             {

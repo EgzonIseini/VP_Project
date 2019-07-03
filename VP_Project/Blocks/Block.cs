@@ -52,10 +52,14 @@ namespace VP_Project.Blocks
         /// </summary>
         public void WasHit(int amount = 1)
         {
-            HP -= amount;
+            HP -= amount * Constants.damageMultiplier;
             if (HP <= 0)
             {
                 exists = false;
+				if(this is PowerUp)
+				{
+					((PowerUp)this).PowerupHit();
+				}
             }
             WasHitRecently = true;
         }
