@@ -54,65 +54,67 @@ To achieve this we had to come up with the following packages and classes classe
 #### Block
 Block is an abstract class from which SquareBlock and PowerUps inherit. The reason behind Block being abstract is that we can have different sort of blocks depending on shape or even functionality, for instance we could have SquareBlocks and TriangularBlocks yet both would need some sort of drawing going on and both would need some sort of "hit mechanism" and so on.
 
-    ```csharp
-    [Serializable]
-    public abstract class Block
+```csharp
+[Serializable]
+public abstract class Block
+{
+    public float X { get; set; }
+    public float Y { get; set; }
+    public Color Color { get; set; }
+    public int HP { get; set; }
+    public bool exists; // whether the block still exists, will be used for drawing later
+    protected bool WasHitRecently;
+
+    /// <remarks>
+    /// Color is determined according to HP
+    /// </remarks>
+    public Block(float X, float Y, int HP)
     {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public Color Color { get; set; }
-        public int HP { get; set; }
-        public bool exists; // whether the block still exists, will be used for drawing later
-        protected bool WasHitRecently;
+        this.Y = Y;
+        this.X = X;
+        this.exists = true;
+        Color = Color.Red;
+        this.HP = HP;
+    }
 
-        /// <remarks>
-        /// Color is determined according to HP
-        /// </remarks>
-        public Block(float X, float Y, int HP)
+    /// <summary>
+    /// Method to draw the block
+    /// </summary>
+    public abstract void Draw(Graphics g);
+
+    /// <summary>
+    /// Method to find the distance between block and point provided as arg
+    /// </summary>
+    /// <returns>Distance as float</returns>
+    protected float GetDistance(float X, float Y)
+    {
+        return (float)Math.Sqrt((this.X - X) * (this.X - X) + (this.Y - Y) * (this.Y - Y));
+
+    }
+    
+    /// <summary>
+    /// Callback method when block is hit
+    /// </summary>
+    /// <param name="amount">Ball power</param>
+    /// <returns>Consequence of hit depending on type of block</returns>
+    public abstract int WasHit(int amount = 1);
+
+    /// <summary>
+    /// Internal method invoked when block is hit
+    /// It should decrease the HP by the amount provided as arg
+    /// Default val is 1
+    /// </summary>
+    protected void DeductHP(int amount = 1)
+    {
+        if (HP <= 0)
         {
-            this.Y = Y;
-            this.X = X;
-            this.exists = true;
-            Color = Color.Red;
-            this.HP = HP;
+            exists = false;
         }
+        WasHitRecently = true;
+    }
+}
+```
 
-        /// <summary>
-        /// Method to draw the block
-        /// </summary>
-        public abstract void Draw(Graphics g);
-
-        /// <summary>
-        /// Method to find the distance between block and point provided as arg
-        /// </summary>
-        /// <returns>Distance as float</returns>
-        protected float GetDistance(float X, float Y)
-        {
-            return (float)Math.Sqrt((this.X - X) * (this.X - X) + (this.Y - Y) * (this.Y - Y));
-
-        }
-        
-        /// <summary>
-        /// Callback method when block is hit
-        /// </summary>
-        /// <param name="amount">Ball power</param>
-        /// <returns>Consequence of hit depending on type of block</returns>
-        public abstract int WasHit(int amount = 1);
-
-        /// <summary>
-        /// Internal method invoked when block is hit
-        /// It should decrease the HP by the amount provided as arg
-        /// Default val is 1
-        /// </summary>
-        protected void DeductHP(int amount = 1)
-        {
-            if (HP <= 0)
-            {
-                exists = false;
-            }
-            WasHitRecently = true;
-        }
-    }```
 #### Ball
 The Ball class is simply used to draw each ball, keep track of its movement and be responsible for collision detection between Ball and Block including the consequences of such an occasion (changing direction of the ball's movement and deducting HP from each hit block).
 The idea behind the collision function used in this class is the following, having the location of the ball let it be denoted by point **O** and radius **R** and given a block denoted by points **A**, **B**, **C** and **D** starting from the top left corner and going clockwise, we can detect whether a collision happened and in which side it happened in the following way.
