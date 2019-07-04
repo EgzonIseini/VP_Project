@@ -22,7 +22,7 @@ namespace VP_Project.Balls
 			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
 			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 
-			pointToAdd = new Point(ballStart.currentPosition.X + (int)Constants.BALL_RADIUS, ballStart.currentPosition.Y);
+			pointToAdd = new Point(ballStart.currentPosition.X + 20, ballStart.currentPosition.Y);
 
 			this.Angle = Angle;
 			this.allBalls = new List<Ball>();
@@ -42,10 +42,12 @@ namespace VP_Project.Balls
                 }
             }
         }
+
         public bool AnyBallsLeft()
         {
             return numBalls == 0;
         }
+
 		public void Draw(Graphics g)
 		{
 			SolidBrush brush = new SolidBrush(color);

@@ -61,7 +61,7 @@
             this.hintLabel});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(623, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(622, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -117,10 +117,10 @@
             this.damageMultiplierLabel,
             this.toolStripStatusLabel3,
             this.ballMultiplierLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 777);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 778);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-			this.statusStrip1.Size = new System.Drawing.Size(623, 25);
+			this.statusStrip1.Size = new System.Drawing.Size(622, 25);
 			this.statusStrip1.TabIndex = 1;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -170,7 +170,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(623, 802);
+			this.ClientSize = new System.Drawing.Size(622, 803);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.toolStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

@@ -31,8 +31,6 @@ namespace VP_Project
 
         private bool ShotWasTaken;
 
-		private bool isKonamiActivated;
-
         private SoundPlayer hitSoundPlayer;
 
         private SoundPlayer powerUpSoundPlayer;
@@ -92,19 +90,18 @@ namespace VP_Project
             else
             {
                 button_FastForward.Text = "Fast Forward";
-                ballsDraw.Interval = 32;
+                ballsDraw.Interval = 28;
             }
         }
 
         private void timerDraw_Tick(object sender, EventArgs e)
         {
-            // Testing out the BALLS
-            _balls.Move();
-
-            Invalidate(true);
+			_balls.Move();
 
             _balls.checkBalls();
-        }
+
+			Invalidate(true);
+		}
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
@@ -148,6 +145,7 @@ namespace VP_Project
                 MessageBox.Show("GAME OVER");
                 GenerateNewGame();
             }
+
 			Powerup();
 
 			ballStart.GenerateNewPositions();
@@ -207,7 +205,6 @@ namespace VP_Project
 			scoreLabel.Text = "Score: 0";
 
 			konami = new KonamiSequence();
-			isKonamiActivated = false;
 		}
 
         /// <summary>
