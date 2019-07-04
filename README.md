@@ -54,7 +54,7 @@ To achieve this we had to come up with the following packages and classes classe
 #### Block
 Block is an abstract class from which SquareBlock and PowerUps inherit. The reason behind Block being abstract is that we can have different sort of blocks depending on shape or even functionality, for instance we could have SquareBlocks and TriangularBlocks yet both would need some sort of drawing going on and both would need some sort of "hit mechanism" and so on.
 
-    `csharp`
+    ```csharp
     [Serializable]
     public abstract class Block
     {
@@ -112,7 +112,7 @@ Block is an abstract class from which SquareBlock and PowerUps inherit. The reas
             }
             WasHitRecently = true;
         }
-    }
+    }```
 #### Ball
 The Ball class is simply used to draw each ball, keep track of its movement and be responsible for collision detection between Ball and Block including the consequences of such an occasion (changing direction of the ball's movement and deducting HP from each hit block).
 The idea behind the collision function used in this class is the following, having the location of the ball let it be denoted by point **O** and radius **R** and given a block denoted by points **A**, **B**, **C** and **D** starting from the top left corner and going clockwise, we can detect whether a collision happened and in which side it happened in the following way.
