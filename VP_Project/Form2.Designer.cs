@@ -29,19 +29,17 @@
 		private void InitializeComponent()
 		{
 			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.numCurrentScore = new System.Windows.Forms.NumericUpDown();
-			this.numBalls = new System.Windows.Forms.NumericUpDown();
 			this.numScoreMult = new System.Windows.Forms.NumericUpDown();
 			this.numDamageMult = new System.Windows.Forms.NumericUpDown();
 			this.numBallMult = new System.Windows.Forms.NumericUpDown();
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numCurrentScore)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.numBalls)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numScoreMult)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numDamageMult)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numBallMult)).BeginInit();
@@ -50,25 +48,16 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(34, 9);
+			this.label1.Location = new System.Drawing.Point(39, 58);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 17);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "Current Score:";
 			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(41, 42);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(93, 17);
-			this.label2.TabIndex = 1;
-			this.label2.Text = "Current Balls:";
-			// 
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(25, 75);
+			this.label3.Location = new System.Drawing.Point(30, 87);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(109, 17);
 			this.label3.TabIndex = 2;
@@ -77,7 +66,7 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(9, 108);
+			this.label4.Location = new System.Drawing.Point(14, 120);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(125, 17);
 			this.label4.TabIndex = 3;
@@ -86,7 +75,7 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(39, 141);
+			this.label5.Location = new System.Drawing.Point(44, 153);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(95, 17);
 			this.label5.TabIndex = 4;
@@ -94,7 +83,7 @@
 			// 
 			// numCurrentScore
 			// 
-			this.numCurrentScore.Location = new System.Drawing.Point(140, 7);
+			this.numCurrentScore.Location = new System.Drawing.Point(145, 56);
 			this.numCurrentScore.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -106,18 +95,9 @@
 			this.numCurrentScore.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.numCurrentScore.ValueChanged += new System.EventHandler(this.numCurrentScore_ValueChanged);
 			// 
-			// numBalls
-			// 
-			this.numBalls.Location = new System.Drawing.Point(140, 42);
-			this.numBalls.Name = "numBalls";
-			this.numBalls.Size = new System.Drawing.Size(120, 22);
-			this.numBalls.TabIndex = 6;
-			this.numBalls.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.numBalls.ValueChanged += new System.EventHandler(this.numBalls_ValueChanged);
-			// 
 			// numScoreMult
 			// 
-			this.numScoreMult.Location = new System.Drawing.Point(140, 75);
+			this.numScoreMult.Location = new System.Drawing.Point(145, 87);
 			this.numScoreMult.Name = "numScoreMult";
 			this.numScoreMult.Size = new System.Drawing.Size(120, 22);
 			this.numScoreMult.TabIndex = 7;
@@ -126,7 +106,7 @@
 			// 
 			// numDamageMult
 			// 
-			this.numDamageMult.Location = new System.Drawing.Point(140, 108);
+			this.numDamageMult.Location = new System.Drawing.Point(145, 120);
 			this.numDamageMult.Name = "numDamageMult";
 			this.numDamageMult.Size = new System.Drawing.Size(120, 22);
 			this.numDamageMult.TabIndex = 8;
@@ -135,7 +115,7 @@
 			// 
 			// numBallMult
 			// 
-			this.numBallMult.Location = new System.Drawing.Point(140, 141);
+			this.numBallMult.Location = new System.Drawing.Point(145, 153);
 			this.numBallMult.Name = "numBallMult";
 			this.numBallMult.Size = new System.Drawing.Size(120, 22);
 			this.numBallMult.TabIndex = 9;
@@ -162,28 +142,35 @@
 			this.buttonCancel.Text = "Cancel (be a good boy)";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(12, 9);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(246, 34);
+			this.label2.TabIndex = 12;
+			this.label2.Text = "CAUTION: powerful cheat. With great \r\npower comes great responsibility! :)";
+			// 
 			// cheatMenu
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(283, 285);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.numBallMult);
 			this.Controls.Add(this.numDamageMult);
 			this.Controls.Add(this.numScoreMult);
-			this.Controls.Add(this.numBalls);
 			this.Controls.Add(this.numCurrentScore);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Name = "cheatMenu";
-			this.Text = "KONAMI CODE :)";
+			this.Text = "CHEAT MENU";
 			this.Load += new System.EventHandler(this.cheatMenu_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numCurrentScore)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numBalls)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numScoreMult)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numDamageMult)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numBallMult)).EndInit();
@@ -195,16 +182,15 @@
 		#endregion
 
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.NumericUpDown numCurrentScore;
-		private System.Windows.Forms.NumericUpDown numBalls;
 		private System.Windows.Forms.NumericUpDown numScoreMult;
 		private System.Windows.Forms.NumericUpDown numDamageMult;
 		private System.Windows.Forms.NumericUpDown numBallMult;
 		private System.Windows.Forms.Button buttonOK;
 		private System.Windows.Forms.Button buttonCancel;
+		private System.Windows.Forms.Label label2;
 	}
 }

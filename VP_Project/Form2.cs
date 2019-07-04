@@ -19,18 +19,16 @@ namespace VP_Project
 		public int newScoreMult { get; set; }
 		public int newDamageMult { get; set; }
 
-		public cheatMenu(int score, int balls, int scoremult, int damagemult, int ballmult)
+		public cheatMenu(int score, int scoremult, int damagemult, int ballmult)
 		{
 			InitializeComponent();
 
 			newScore = score;
-			newBalls = balls;
 			newScoreMult = scoremult;
 			newDamageMult = damagemult;
 			newBallMult = ballmult;
 
 			numCurrentScore.Value = score;
-			numBalls.Value = balls;
 			numScoreMult.Value = scoremult;
 			numDamageMult.Value = damagemult;
 			numBallMult.Value = ballmult;
@@ -54,11 +52,6 @@ namespace VP_Project
 		private void numBallMult_ValueChanged(object sender, EventArgs e)
 		{
 			newBallMult = (int)numBallMult.Value;
-		}
-
-		private void numBalls_ValueChanged(object sender, EventArgs e)
-		{
-			newBalls = (int)numBalls.Value;
 		}
 
 		private void numCurrentScore_ValueChanged(object sender, EventArgs e)

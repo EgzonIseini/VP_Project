@@ -387,6 +387,9 @@ namespace VP_Project
 
 			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
 			else ballMultiplierLabel.Text = "";
+
+			// Reset powerup array after everything is done.
+			powerups.Clear();
 		}
 
 		private void ResetPowerups()
@@ -404,12 +407,11 @@ namespace VP_Project
 		{
 			if(konami.IsCompletedBy(e.KeyCode))
 			{
-				cheatMenu form = new cheatMenu(Constants.currentScore, ballsToAdd, Constants.scoreMultiplier, Constants.damageMultiplier, Constants.ballMultiplier);
+				cheatMenu form = new cheatMenu(Constants.currentScore, Constants.scoreMultiplier, Constants.damageMultiplier, Constants.ballMultiplier);
 				
 				if( form.ShowDialog() == DialogResult.OK )
 				{
 					Constants.currentScore = form.newScore;
-					ballsToAdd = form.newBalls;
 					Constants.scoreMultiplier = form.newScoreMult;
 					Constants.damageMultiplier = form.newDamageMult;
 					Constants.ballMultiplier = form.newBallMult;
