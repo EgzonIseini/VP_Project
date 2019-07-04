@@ -6,29 +6,32 @@ namespace VP_Project.Balls
 	public class BallStart
 	{
 		public Point currentPosition { get; set; }
-		public Point nextPosition { get; set; }
+		public static Point nextPosition { get; set; }
 
 		public static int Radius = (int)Constants.BALL_RADIUS;
 		public static Color currentColor = Color.White;
 		public static Color nextColor = Color.LimeGreen;
+
+		public static readonly int BALL_SIZE = 10;
 		
 		public BallStart()
 		{
-			int y = Constants.FORM_BOTTOM + (int)Constants.BALL_RADIUS;
-			int x = Constants.RANDOM.Next(0 + (int)Radius, Constants.FORM_RIGHT - (int)Radius);
+			int y = Constants.FORM_BOTTOM + BALL_SIZE;
+			int x = Constants.RANDOM.Next(0 + BALL_SIZE, Constants.FORM_RIGHT - BALL_SIZE);
 
 			currentPosition = new Point(x, y);
+			nextPosition = new Point(-100, -100);
 		}
 
 		public void Draw(int ballsLeft, Graphics g)
 		{
 			SolidBrush currentBrush = new SolidBrush(currentColor), nextBrush = new SolidBrush(nextColor);
 
-			//Current Position
-			g.FillEllipse(currentBrush, currentPosition.X, currentPosition.Y, 2 * Radius, 2 * Radius);
-
 			//Next Poistion
-			g.FillEllipse(nextBrush, nextPosition.X, nextPosition.Y, 2 * Radius, 2 * Radius);
+			g.FillEllipse(nextBrush, nextPosition.X, nextPosition.Y, 4 * Radius, 4 * Radius);
+
+			//Current Position
+			g.FillEllipse(currentBrush, currentPosition.X, currentPosition.Y, 4 * Radius, 4 * Radius);
 
 			DrawBallsLeft(ballsLeft, g);
 
@@ -38,17 +41,8 @@ namespace VP_Project.Balls
 
 		public void GenerateNewPositions()
 		{
-			int y = Constants.FORM_BOTTOM + (int)Constants.BALL_RADIUS;
-			int x = Constants.RANDOM.Next(0 + (int)Radius, Constants.FORM_RIGHT - (int)Radius);
-
-			currentPosition = new Point(x, y);
-			nextPosition = new Point(x, y);
-
-			while (GetDistance(currentPosition, nextPosition) <= 2 * Radius)
-			{
-				x = Constants.RANDOM.Next(0 + Radius, Constants.FORM_RIGHT - Radius);
-				nextPosition = new Point(x, y);
-			}
+			currentPosition = nextPosition;
+			nextPosition = new Point(-100, -100);
 		}
 
 		private void DrawBallsLeft(int ballsLeft, Graphics g)
@@ -58,7 +52,7 @@ namespace VP_Project.Balls
 			stringFormat.Alignment = StringAlignment.Center;
 			stringFormat.LineAlignment = StringAlignment.Center;
 
-			g.DrawString(ballsLeft + "", font, Brushes.Black, currentPosition.X + Radius, currentPosition.Y + Radius, stringFormat);
+			g.DrawString(ballsLeft + "", font, Brushes.Black, currentPosition.X + BALL_SIZE, currentPosition.Y + BALL_SIZE, stringFormat);
 		}
 
 		private int GetDistance(Point current, Point next)

@@ -14,8 +14,8 @@ namespace VP_Project.Balls
         public int numBalls { get; set; }
         public List<Ball> allBalls { get; set; }
 		Color color;
-		private Point pointToAdd;
-		private float Angle;
+		public Point pointToAdd { get; set; }
+		public float Angle { get; set; }
 		public int ballsLeft { get; set; }
         public Balls(int n, Color color, float Angle, BallStart ballStart) 
         {

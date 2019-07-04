@@ -31,9 +31,13 @@ namespace VP_Project
 
         private bool ShotWasTaken;
 
+		private bool isKonamiActivated;
+
         private SoundPlayer hitSoundPlayer;
 
         private SoundPlayer powerUpSoundPlayer;
+
+		private KonamiSequence konami;
 
         public object ApplicationData { get; private set; }
 
@@ -145,6 +149,8 @@ namespace VP_Project
                 GenerateNewGame();
             }
 			Powerup();
+
+			ballStart.GenerateNewPositions();
         }
 
         /// <summary>
@@ -199,6 +205,9 @@ namespace VP_Project
 			damageMultiplierLabel.Text = "";
 			ballMultiplierLabel.Text = "";
 			scoreLabel.Text = "Score: 0";
+
+			konami = new KonamiSequence();
+			isKonamiActivated = false;
 		}
 
         /// <summary>
@@ -307,7 +316,7 @@ namespace VP_Project
             Pen blackPen = new Pen(black, 3);
             blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
+            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.BALL_SIZE, ballStart.currentPosition.Y + Balls.BallStart.BALL_SIZE);
             g.DrawLine(blackPen, newPoint, lastMouseLocation);
         }
 
@@ -378,9 +387,6 @@ namespace VP_Project
 
 			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
 			else ballMultiplierLabel.Text = "";
-
-			// Clear pwoerup array for next use.
-			powerups.Clear();
 		}
 
 		private void ResetPowerups()
@@ -389,5 +395,57 @@ namespace VP_Project
 			Constants.damageMultiplier = 1;
 		}
 
+		private void hintLabel_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("KONAMI :)");
+		}
+
+		private void Game_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(konami.IsCompletedBy(e.KeyCode))
+			{
+				cheatMenu form = new cheatMenu(Constants.currentScore, ballsToAdd, Constants.scoreMultiplier, Constants.damageMultiplier, Constants.ballMultiplier);
+				
+				if( form.ShowDialog() == DialogResult.OK )
+				{
+					Constants.currentScore = form.newScore;
+					ballsToAdd = form.newBalls;
+					Constants.scoreMultiplier = form.newScoreMult;
+					Constants.damageMultiplier = form.newDamageMult;
+					Constants.ballMultiplier = form.newBallMult;
+
+					scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Constants.scoreMultiplier);
+					damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Constants.damageMultiplier);
+					ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
+					scoreLabel.Text = String.Format("Score: {0}", Constants.currentScore);
+
+					powerups.Clear();
+				}
+			}
+		}
+	}
+
+	public class KonamiSequence
+	{
+		readonly Keys[] _code = { Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right, Keys.B, Keys.A };
+
+		private int _offset;
+		private readonly int _length, _target;
+
+		public KonamiSequence()
+		{
+			_length = _code.Length - 1;
+			_target = _code.Length;
+		}
+
+		public bool IsCompletedBy(Keys key)
+		{
+			_offset %= _target;
+
+			if (key == _code[_offset]) _offset++;
+			else if (key == _code[0]) _offset = 2;  // repeat index
+
+			return _offset > _length;
+		}
 	}
 }

@@ -165,7 +165,12 @@ namespace VP_Project.Balls
             if (nextY + r >= height + top)
             {
                 BallDead = true;
-            }
+
+				int y = Constants.FORM_BOTTOM + (int)Constants.BALL_RADIUS;
+				int x = Center.X - (int)Constants.BALL_RADIUS;
+
+				if( BallStart.nextPosition.X == -100 ) BallStart.nextPosition = new Point(x, y);
+			}
             if (nextY - r <= top)
             {
                 velocityY = -velocityY;

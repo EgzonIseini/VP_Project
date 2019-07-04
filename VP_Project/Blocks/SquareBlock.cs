@@ -23,7 +23,7 @@ namespace VP_Project.Blocks
             if (WasHitRecently)
                 g.DrawString(HP + "", font, Brushes.White, rec, stringFormat);
             else
-                g.DrawString(HP + "", font, Brushes.Red, rec, stringFormat);
+                g.DrawString(HP + "", font, Brushes.LightPink, rec, stringFormat);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace VP_Project.Blocks
 
         public override void Draw(Graphics g)
         {
-            Pen pen = new Pen(Color.Red, Constants.PEN_WIDTH);
+            Pen pen = new Pen(Color.LightPink, Constants.PEN_WIDTH);
             DrawBlock(pen, g);
             pen.Dispose();
         }

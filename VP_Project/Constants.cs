@@ -18,7 +18,7 @@ namespace VP_Project
         public static readonly Random RANDOM = new Random();
         public static readonly int TIMER_60_FPS = 16; //unit is ms
         public static readonly int TIMER_30_FPS = 32;
-        public static readonly float BLOCK_MOVE_SPEED = 1F;
+        public static readonly float BLOCK_MOVE_SPEED = 2F;
         public static readonly int PROBABILITY_OF_BLOCK = 5; // determines the probability of a block being generated in a row
         public static readonly int NUM_OF_BLOCKS_IN_ROW = 10;
         public static readonly float BALL_RADIUS = 5F; // dummy value for calcuation purposes, change it accordingly
