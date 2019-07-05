@@ -292,9 +292,11 @@ namespace VP_Project
                 {
                     foreach (Block block in row.Blocks)
                     {
-						if (ball.CheckCollision(block) == 0)
-							hitSoundPlayer.Play();
-
+                        int tmp = ball.CheckCollision(block);
+                        if (tmp == 0)
+                            hitSoundPlayer.Play();
+                        else if (tmp > 0)
+                            powerUpSoundPlayer.Play();
 						// Update Score after collision detection.
 						scoreLabel.Text = String.Format("Score: {0}", Constants.currentScore);
 
