@@ -91,7 +91,8 @@ namespace VP_Project.Blocks
         public override int WasHit(int amount = 1)
         {
             DeductHP(amount);
+			this.PowerupHit();
             return Type;
         }
-    }
+	}
 }

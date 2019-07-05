@@ -64,10 +64,6 @@ namespace VP_Project.Blocks
             if (HP <= 0)
             {
                 exists = false;
-				if(this is PowerUp)
-				{
-					((PowerUp)this).PowerupHit();
-				}
             }
             WasHitRecently = true;
         }
