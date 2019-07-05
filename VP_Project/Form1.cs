@@ -248,7 +248,6 @@ namespace VP_Project
 			rows.Add(new Row());
 
 			_balls.Terminate();
-			// rows.Clear();
 
 			ballStart = new Balls.BallStart();
 
