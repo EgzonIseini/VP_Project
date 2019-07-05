@@ -7,11 +7,8 @@ namespace VP_Project.Blocks
     [Serializable]
     public class SquareBlock : Block
     {
-		private int ColorType;
-
         public SquareBlock(float X, float Y, int HP) : base(X, Y, HP)
         {
-			ColorType = Constants.RANDOM.Next(0, 4);
         }
 
         /// <summary>
@@ -26,7 +23,7 @@ namespace VP_Project.Blocks
             if (WasHitRecently)
                 g.DrawString(HP + "", font, Brushes.White, rec, stringFormat);
             else
-                g.DrawString(HP + "", font, Constants.squareBlockBrush[ColorType], rec, stringFormat);
+                g.DrawString(HP + "", font, Brushes.LightPink, rec, stringFormat);
         }
 
         /// <summary>
@@ -50,7 +47,7 @@ namespace VP_Project.Blocks
 
         public override void Draw(Graphics g)
         {
-            Pen pen = new Pen(Constants.squareBlockColor[ColorType], Constants.PEN_WIDTH);
+            Pen pen = new Pen(Color.LightPink, Constants.PEN_WIDTH);
             DrawBlock(pen, g);
             pen.Dispose();
         }
