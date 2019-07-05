@@ -35,6 +35,8 @@ namespace VP_Project
 
         private SoundPlayer powerUpSoundPlayer;
 
+		private KonamiSequence konami;
+
         public object ApplicationData { get; private set; }
 
 		public static List<int> powerups { get; set; }
@@ -88,19 +90,18 @@ namespace VP_Project
             else
             {
                 button_FastForward.Text = "Fast Forward";
-                ballsDraw.Interval = 32;
+                ballsDraw.Interval = 28;
             }
         }
 
         private void timerDraw_Tick(object sender, EventArgs e)
         {
-            // Testing out the BALLS
-            _balls.Move();
-
-            Invalidate(true);
+			_balls.Move();
 
             _balls.checkBalls();
-        }
+
+			Invalidate(true);
+		}
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
@@ -144,7 +145,8 @@ namespace VP_Project
                 MessageBox.Show("GAME OVER");
                 GenerateNewGame();
             }
-			Powerup();
+
+			ballStart.GenerateNewPositions();
         }
 
         /// <summary>
@@ -193,12 +195,17 @@ namespace VP_Project
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
+			// Sets score to 0 and all other multipliers to 1.
+			NewGameStats();
+
 			powerups = new List<int>();
 
 			scoreMultiplierLabel.Text = "";
 			damageMultiplierLabel.Text = "";
 			ballMultiplierLabel.Text = "";
 			scoreLabel.Text = "Score: 0";
+
+			konami = new KonamiSequence();
 		}
 
         /// <summary>
@@ -224,16 +231,15 @@ namespace VP_Project
             Row.ResetGame();
             rows = new List<Row>();
             rows.Add(new Row());
-            this.ballsToAdd = 1;
+
+
+			// Sets score to 0 and all multipliers to 1;
+			NewGameStats();
 
 			scoreMultiplierLabel.Text = "";
 			damageMultiplierLabel.Text = "";
 			ballMultiplierLabel.Text = "";
 			scoreLabel.Text = "Score: 0";
-
-			ResetPowerups();
-			Constants.currentScore = 0;
-			Constants.ballMultiplier = 0;
 		}
 
         /// <summary>
@@ -262,7 +268,8 @@ namespace VP_Project
                 {
                     ShotWasTaken = false;
 					ResetPowerups();
-                    MoveRowsDown();
+					Powerup();
+					MoveRowsDown();
                 }
             }
             else
@@ -307,7 +314,7 @@ namespace VP_Project
             Pen blackPen = new Pen(black, 3);
             blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.Radius, ballStart.currentPosition.Y + Balls.BallStart.Radius);
+            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.BALL_SIZE, ballStart.currentPosition.Y + Balls.BallStart.BALL_SIZE);
             g.DrawLine(blackPen, newPoint, lastMouseLocation);
         }
 
@@ -379,7 +386,7 @@ namespace VP_Project
 			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
 			else ballMultiplierLabel.Text = "";
 
-			// Clear pwoerup array for next use.
+			// Reset powerup array after everything is done.
 			powerups.Clear();
 		}
 
@@ -389,5 +396,65 @@ namespace VP_Project
 			Constants.damageMultiplier = 1;
 		}
 
+		private void NewGameStats()
+		{
+			this.ballsToAdd = 1;
+			Constants.currentScore = 0;
+			Constants.scoreMultiplier = 1;
+			Constants.ballMultiplier = 1;
+			Constants.damageMultiplier = 1;
+		}
+
+		private void hintLabel_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("KONAMI :)");
+		}
+
+		private void Game_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(konami.IsCompletedBy(e.KeyCode))
+			{
+				cheatMenu form = new cheatMenu(Constants.currentScore, Constants.scoreMultiplier, Constants.damageMultiplier, Constants.ballMultiplier);
+				
+				if( form.ShowDialog() == DialogResult.OK )
+				{
+					Constants.currentScore = form.newScore;
+					Constants.scoreMultiplier = form.newScoreMult;
+					Constants.damageMultiplier = form.newDamageMult;
+					Constants.ballMultiplier = form.newBallMult;
+
+					scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Constants.scoreMultiplier);
+					damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Constants.damageMultiplier);
+					ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
+					scoreLabel.Text = String.Format("Score: {0}", Constants.currentScore);
+
+					powerups.Clear();
+				}
+			}
+		}
+	}
+
+	public class KonamiSequence
+	{
+		readonly Keys[] _code = { Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right, Keys.B, Keys.A };
+
+		private int _offset;
+		private readonly int _length, _target;
+
+		public KonamiSequence()
+		{
+			_length = _code.Length - 1;
+			_target = _code.Length;
+		}
+
+		public bool IsCompletedBy(Keys key)
+		{
+			_offset %= _target;
+
+			if (key == _code[_offset]) _offset++;
+			else if (key == _code[0]) _offset = 2;  // repeat index
+
+			return _offset > _length;
+		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -160,12 +161,19 @@ namespace VP_Project.Balls
 
 				// Slows the vertical speed of the balls, so they gradually start falling down
 				// instead of going left-right endlessly.
-				velocityY += 0.15F;
+				Debug.WriteLine(String.Format("velocityY is: {0}", velocityY));
+				if (velocityY < 1 && velocityY > 0) velocityY += 0.5F;
+				else velocityY += 0.1F;
             }
             if (nextY + r >= height + top)
             {
                 BallDead = true;
-            }
+
+				int y = Constants.FORM_BOTTOM + (int)Constants.BALL_RADIUS;
+				int x = Center.X - (int)Constants.BALL_RADIUS;
+
+				if( BallStart.nextPosition.X == -100 ) BallStart.nextPosition = new Point(x, y);
+			}
             if (nextY - r <= top)
             {
                 velocityY = -velocityY;
