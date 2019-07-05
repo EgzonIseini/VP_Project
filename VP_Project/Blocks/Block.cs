@@ -60,7 +60,7 @@ namespace VP_Project.Blocks
         /// </summary>
         protected void DeductHP(int amount = 1)
         {
-            HP -= amount * Constants.damageMultiplier;
+            HP -= amount * Game.damageMultiplier;
             if (HP <= 0)
             {
                 exists = false;

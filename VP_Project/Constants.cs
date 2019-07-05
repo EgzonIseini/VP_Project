@@ -46,22 +46,5 @@ namespace VP_Project
 			Properties.Resources.doubleball,
 			Properties.Resources.finki
 		};
-
-		// <--------------- PER GAME POWERUP VARS ---------------------->
-
-		// Current score player has. Calculated as Damage done * damage multiplier * score multiplier
-		public static int currentScore = 0;
-
-		// Multiplies score per every block destroyed. Stacks up multiple double score powerups.
-		// Score Returned = initial score * scoreMultiplier; --- initially 1, double score is 2, trple score is 3 and so on.
-		public static int scoreMultiplier = 1;
-
-		// Same as above, just multiplies the balls to be launched in the next round. Returns ballsToAdd * ballMultiplier
-		public static int ballMultiplier = 1;
-
-		// Same as above, does x times more damage per ball to a block. Stacks up. Returns 1 * damageMultiplier
-		public static int damageMultiplier = 1;
-
-		// <--------------- FORM METHODS ---------------------->
 	}
 }

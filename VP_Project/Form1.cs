@@ -41,6 +41,19 @@ namespace VP_Project
 
 		public static List<int> powerups { get; set; }
 
+        // Current score player has. Calculated as Damage done * damage multiplier * score multiplier
+        public static int currentScore = 0;
+
+        // Multiplies score per every block destroyed. Stacks up multiple double score powerups.
+        // Score Returned = initial score * scoreMultiplier; --- initially 1, double score is 2, trple score is 3 and so on.
+        public static int scoreMultiplier = 1;
+
+        // Same as above, just multiplies the balls to be launched in the next round. Returns ballsToAdd * ballMultiplier
+        public static int ballMultiplier = 1;
+
+        // Same as above, does x times more damage per ball to a block. Stacks up. Returns 1 * damageMultiplier
+        public static int damageMultiplier = 1;
+
         // <--------------- FORM METHODS ---------------------->
 
         public Game()
@@ -155,8 +168,8 @@ namespace VP_Project
         /// <param name="location">Final location where the balls should be thrown at</param>
         private void ThrowBalls(Point location)
         {
-			_balls = new Balls.Balls(ballsToAdd * Constants.ballMultiplier, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
-			Constants.ballMultiplier = 1;
+			_balls = new Balls.Balls(ballsToAdd * Game.ballMultiplier, Color.Black, GetAngle(ballStart.currentPosition, location), ballStart);
+            Game.ballMultiplier = 1;
         }
 
         /// <summary>
@@ -263,7 +276,7 @@ namespace VP_Project
 
             if (_balls.allBalls.Count == 0)
             {
-                ballStart.Draw(ballsToAdd * Constants.ballMultiplier, g);
+                ballStart.Draw(ballsToAdd * Game.ballMultiplier, g);
                 if (ShotWasTaken)
                 {
                     ShotWasTaken = false;
@@ -298,7 +311,7 @@ namespace VP_Project
                         else if (tmp > 0)
                             powerUpSoundPlayer.Play();
 						// Update Score after collision detection.
-						scoreLabel.Text = String.Format("Score: {0}", Constants.currentScore);
+						scoreLabel.Text = String.Format("Score: {0}", Game.currentScore);
 
 						//TODO: Checks for other kinds of block should be put here, check summary of CheckCollision
 						//Call powerUpPlayer's Play method accordingly
@@ -330,8 +343,11 @@ namespace VP_Project
             {
                 IFormatter formatter = new BinaryFormatter();
                 fileStream.Position = 0;
-                formatter.Serialize(fileStream, rows);
+                GameState gameState = new GameState(_balls, rows, Game.currentScore, Game.damageMultiplier, Game.scoreMultiplier, Game.ballMultiplier, this.ballsToAdd);
+                formatter.Serialize(fileStream, gameState);
             }
+
+
         }
 
         /// <summary>
@@ -373,19 +389,19 @@ namespace VP_Project
 				switch (powerup)
 				{
 					case 1: ballsToAdd++; break;
-					case 2: Constants.scoreMultiplier++; break;
-					case 3: Constants.damageMultiplier++; break;
-					case 4: Constants.ballMultiplier++; break;
+					case 2: Game.scoreMultiplier++; break;
+					case 3: Game.damageMultiplier++; break;
+					case 4: Game.ballMultiplier++; break;
 				}
 			}
 
-			if (Constants.scoreMultiplier != 1) scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Constants.scoreMultiplier);
+			if (Game.scoreMultiplier != 1) scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Game.scoreMultiplier);
 			else scoreMultiplierLabel.Text = "";
 
-			if (Constants.damageMultiplier != 1) damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Constants.damageMultiplier);
+			if (Game.damageMultiplier != 1) damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Game.damageMultiplier);
 			else damageMultiplierLabel.Text = "";
 
-			if (Constants.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
+			if (Game.ballMultiplier != 1) ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Game.ballMultiplier);
 			else ballMultiplierLabel.Text = "";
 
 			// Reset powerup array after everything is done.
@@ -394,17 +410,17 @@ namespace VP_Project
 
 		private void ResetPowerups()
 		{
-			Constants.scoreMultiplier = 1;
-			Constants.damageMultiplier = 1;
+            Game.scoreMultiplier = 1;
+            Game.damageMultiplier = 1;
 		}
 
 		private void NewGameStats()
 		{
 			this.ballsToAdd = 1;
-			Constants.currentScore = 0;
-			Constants.scoreMultiplier = 1;
-			Constants.ballMultiplier = 1;
-			Constants.damageMultiplier = 1;
+            Game.currentScore = 0;
+            Game.scoreMultiplier = 1;
+            Game.ballMultiplier = 1;
+            Game.damageMultiplier = 1;
 		}
 
 		private void hintLabel_Click(object sender, EventArgs e)
@@ -416,19 +432,19 @@ namespace VP_Project
 		{
 			if(konami.IsCompletedBy(e.KeyCode))
 			{
-				cheatMenu form = new cheatMenu(Constants.currentScore, Constants.scoreMultiplier, Constants.damageMultiplier, Constants.ballMultiplier);
+				cheatMenu form = new cheatMenu(Game.currentScore, Game.scoreMultiplier, Game.damageMultiplier, Game.ballMultiplier);
 				
 				if( form.ShowDialog() == DialogResult.OK )
 				{
-					Constants.currentScore = form.newScore;
-					Constants.scoreMultiplier = form.newScoreMult;
-					Constants.damageMultiplier = form.newDamageMult;
-					Constants.ballMultiplier = form.newBallMult;
+                    Game.currentScore = form.newScore;
+                    Game.scoreMultiplier = form.newScoreMult;
+                    Game.damageMultiplier = form.newDamageMult;
+                    Game.ballMultiplier = form.newBallMult;
 
-					scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Constants.scoreMultiplier);
-					damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Constants.damageMultiplier);
-					ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Constants.ballMultiplier);
-					scoreLabel.Text = String.Format("Score: {0}", Constants.currentScore);
+					scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Game.scoreMultiplier);
+					damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Game.damageMultiplier);
+					ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Game.ballMultiplier);
+					scoreLabel.Text = String.Format("Score: {0}", Game.currentScore);
 
 					powerups.Clear();
 				}
