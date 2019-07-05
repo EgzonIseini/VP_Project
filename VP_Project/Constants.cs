@@ -10,8 +10,10 @@ namespace VP_Project
     /// <summary>
     /// This class will store the constants used accros the app
     /// </summary>
-    public class Constants
+    public sealed class Constants
     {
+        private Constants() { }
+
         public static readonly int BLOCK_WIDTH = 40;
         public static readonly int BLOCK_HEIGHT = 40;
         public static readonly float PEN_WIDTH = 4.5F;
