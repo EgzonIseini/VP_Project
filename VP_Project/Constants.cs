@@ -47,5 +47,21 @@ namespace VP_Project
 			Properties.Resources.doubleball,
 			Properties.Resources.finki
 		};
+
+		public static Brush[] squareBlockBrush =
+		{
+			Brushes.LightBlue,
+			Brushes.LightPink,
+			Brushes.LightYellow,
+			Brushes.LightSeaGreen
+		};
+
+		public static Color[] squareBlockColor =
+		{
+			Color.LightBlue,
+			Color.LightPink,
+			Color.LightYellow,
+			Color.LightSeaGreen
+		};
 	}
 }

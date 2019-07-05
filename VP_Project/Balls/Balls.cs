@@ -23,7 +23,6 @@ namespace VP_Project.Balls
 			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 
 			startingPoint = new Point(ballStart.currentPosition.X + Constants.BALL_LAUNCHER_SIZE, ballStart.currentPosition.Y + Constants.BALL_LAUNCHER_SIZE);
-			Console.WriteLine("pointToAdd is {0}", startingPoint.ToString());
 
 			this.Angle = Angle;
 			this.allBalls = new List<Ball>();
@@ -31,6 +30,7 @@ namespace VP_Project.Balls
 			numBalls = n;
 			ballsLeft = n;
         }
+
         public void checkBalls()
         {
             for(int i=0;i<allBalls.Count; i++)
@@ -44,7 +44,7 @@ namespace VP_Project.Balls
             }
         }
 
-        public bool AnyBallsLeft()
+        private bool AnyBallsLeft()
         {
             return numBalls == 0;
         }
@@ -58,6 +58,7 @@ namespace VP_Project.Balls
 			}
 			brush.Dispose();
 		}
+
 		public void Move()
 		{
 			foreach(Ball b in allBalls)
@@ -65,10 +66,18 @@ namespace VP_Project.Balls
 				b.Move();
 			}
 		}
+
 		public void AddBall()
 		{
 			allBalls.Add(new Ball(startingPoint, color, Angle));
 			ballsLeft--;
+		}
+
+		public void Terminate()
+		{
+			ballsLeft = 0;
+			numBalls = 0;
+			allBalls.Clear();
 		}
     }
 }

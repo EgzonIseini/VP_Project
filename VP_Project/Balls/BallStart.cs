@@ -65,9 +65,12 @@ namespace VP_Project.Balls
 		/// </summary>
 		public void GenerateNewPositions()
 		{
-			Console.WriteLine("the ballStarter new position is {0}", nextPosition.ToString());
-			currentPosition = nextPosition;
-			nextPosition = new Point(-100, -100);
+			if (nextPosition.X == -100) return;
+			else
+			{
+				currentPosition = nextPosition;
+				nextPosition = new Point(-100, -100);
+			}
 		}
 
 		/// <summary>

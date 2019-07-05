@@ -69,12 +69,10 @@ namespace VP_Project
 
         private void Game_MouseClick(object sender, MouseEventArgs e)
         {
-			Console.WriteLine(String.Format("Mouse click at position (X:{0}, Y:{1}). BallStart Current Center {2}", e.X, e.Y, ballStart.currentPosition.ToString()));
-            if (_balls.allBalls.Count == 0)
+			if (_balls.allBalls.Count == 0)
             {
                 ThrowBalls(e.Location);
             }
-            Invalidate(true);
         }
 
         private void Game_Paint(object sender, PaintEventArgs e)
@@ -156,7 +154,7 @@ namespace VP_Project
             timerDraw.Enabled = true;
             if (IsGameOver())
             {
-                MessageBox.Show("GAME OVER");
+                MessageBox.Show("Game Over.");
                 GenerateNewGame();
             }
 
@@ -181,8 +179,6 @@ namespace VP_Project
         /// <returns>Angle between start and arrival in radians</returns>
         private float GetAngle(Point start, Point arrival)
         {
-			//start = new Point(start.X + 10, start.Y + 10);
-			//Console.WriteLine("Altered ballLauncher {0}", start);
             var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
             return (float)radian;
         }
@@ -196,6 +192,7 @@ namespace VP_Project
             timerDraw.Interval = Constants.TIMER_60_FPS;
             OpenPreviousGame();
             this.DoubleBuffered = true;
+			this.KeyPreview = true;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.ballsDraw = new Timer();
@@ -212,14 +209,16 @@ namespace VP_Project
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
 			// Sets score to 0 and all other multipliers to 1.
-			NewGameStats();
+			/*
+				NewGameStats();
 
-			powerups = new List<int>();
+				powerups = new List<int>();
 
-			scoreMultiplierLabel.Text = "";
-			damageMultiplierLabel.Text = "";
-			ballMultiplierLabel.Text = "";
-			scoreLabel.Text = "Score: 0";
+				scoreMultiplierLabel.Text = "";
+				damageMultiplierLabel.Text = "";
+				ballMultiplierLabel.Text = "";
+				scoreLabel.Text = "Score: 0";
+			*/
 
 			konami = new KonamiSequence();
 		}
@@ -244,10 +243,14 @@ namespace VP_Project
         /// </summary>
         private void GenerateNewGame()
         {
-            Row.ResetGame();
-            rows = new List<Row>();
-            rows.Add(new Row());
+			Row.ResetGame();
+			rows = new List<Row>();
+			rows.Add(new Row());
 
+			_balls.Terminate();
+			// rows.Clear();
+
+			ballStart = new Balls.BallStart();
 
 			// Sets score to 0 and all multipliers to 1;
 			NewGameStats();
@@ -284,7 +287,7 @@ namespace VP_Project
                 {
                     ShotWasTaken = false;
 					ResetPowerups();
-					Powerup();
+					InitPowerups();
 					MoveRowsDown();
                 }
             }
@@ -385,14 +388,16 @@ namespace VP_Project
                 Game.currentScore = gameState.Score;
                 Game.damageMultiplier = gameState.DamagePowerUp;
                 Game.scoreMultiplier = gameState.ScorePowerUp;
-                rows = gameState.Rows;
-                Row.SetRowNum(rows.Count);
-                powerups = new List<int>();
-                this.Powerup();
-            }
+				rows = gameState.Rows;
+				Row.SetRowNum(rows.Count);
+				powerups = new List<int>();
+
+				scoreLabel.Text = String.Format("Score: {0}", Game.currentScore);
+				InitPowerups();
+			}
         }
 
-		private void Powerup()
+		private void InitPowerups()
 		{
 			for (int i = 0; i < powerups.Count; i++)
 			{
@@ -434,11 +439,13 @@ namespace VP_Project
             Game.scoreMultiplier = 1;
             Game.ballMultiplier = 1;
             Game.damageMultiplier = 1;
+
+			powerups = new List<int>();
 		}
 
 		private void hintLabel_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("KONAMI :)");
+			MessageBox.Show("(CTRL + R)\t - Destroys all current balls and advances to next round.\n\n Hint: KONAMI CODE ;)");
 		}
 
 		private void Game_KeyUp(object sender, KeyEventArgs e)
@@ -454,13 +461,14 @@ namespace VP_Project
                     Game.damageMultiplier = form.newDamageMult;
                     Game.ballMultiplier = form.newBallMult;
 
-					scoreMultiplierLabel.Text = String.Format("Score Mult x{0}", Game.scoreMultiplier);
-					damageMultiplierLabel.Text = String.Format("Damage Mult x{0}", Game.damageMultiplier);
-					ballMultiplierLabel.Text = String.Format("Ball Mult x{0}", Game.ballMultiplier);
 					scoreLabel.Text = String.Format("Score: {0}", Game.currentScore);
-
-					powerups.Clear();
+					InitPowerups();
 				}
+			}
+
+			if (e.Control && e.KeyCode == Keys.R)
+			{
+				_balls.Terminate();
 			}
 		}
 	}
