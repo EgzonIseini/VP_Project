@@ -343,7 +343,7 @@ namespace VP_Project
             {
                 IFormatter formatter = new BinaryFormatter();
                 fileStream.Position = 0;
-                GameState gameState = new GameState(_balls, rows, Game.currentScore, Game.damageMultiplier, Game.scoreMultiplier, Game.ballMultiplier, this.ballsToAdd);
+                GameState gameState = new GameState(rows, Game.currentScore, Game.damageMultiplier, Game.scoreMultiplier, Game.ballMultiplier, this.ballsToAdd);
                 formatter.Serialize(fileStream, gameState);
             }
 
@@ -357,25 +357,35 @@ namespace VP_Project
         {
             string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "last_game.bb");
             Console.WriteLine(fileName);
+            GameState gameState = null;
             try
             {
                 using(FileStream fileStream = new FileStream(fileName, FileMode.Open))
                 {
                     IFormatter formatter = new BinaryFormatter();
-                    rows = (List<Row>) formatter.Deserialize(fileStream);
+                    gameState = (GameState) formatter.Deserialize(fileStream);
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            if (rows == null || rows.Count == 0)
+            if (gameState == null)
             {
                 GenerateNewGame();
             }
-            else if (rows.Count != 0)
+            else
             {
-                ballsToAdd = rows.Count;
-                Row.SetRowNum(ballsToAdd);
+                //_balls = gameState.Balls;
+                ballsToAdd = gameState.BallsToAdd;
+                Game.ballMultiplier = gameState.BallPowerUp;
+                Game.currentScore = gameState.Score;
+                Game.damageMultiplier = gameState.DamagePowerUp;
+                Game.scoreMultiplier = gameState.ScorePowerUp;
+                rows = gameState.Rows;
+                Row.SetRowNum(rows.Count);
+                powerups = new List<int>();
+                this.Powerup();
             }
         }
 

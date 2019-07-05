@@ -7,7 +7,6 @@ namespace VP_Project
     [Serializable]
     public class GameState
     {
-        public Balls.Balls Balls { get; set; }
         public List<Row> Rows { get; set; }
         public int Score { get; set; }
         public int DamagePowerUp { get; set; }
@@ -15,9 +14,8 @@ namespace VP_Project
         public int BallPowerUp { get; set; }
         public int BallsToAdd { get; set; }
 
-        public GameState(Balls.Balls balls, List<Row> rows, int score, int damagePowerUp, int scorePowerUp, int ballPowerUp, int ballsToAdd)
+        public GameState(List<Row> rows, int score, int damagePowerUp, int scorePowerUp, int ballPowerUp, int ballsToAdd)
         {
-            Balls = balls;
             Rows = rows;
             Score = score;
             DamagePowerUp = damagePowerUp;
@@ -28,6 +26,7 @@ namespace VP_Project
 
         public GameState()
         {
+            Rows = new List<Row>();
         }
     }
 }
