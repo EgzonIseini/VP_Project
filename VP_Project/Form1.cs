@@ -69,6 +69,7 @@ namespace VP_Project
 
         private void Game_MouseClick(object sender, MouseEventArgs e)
         {
+			Console.WriteLine(String.Format("Mouse click at position (X:{0}, Y:{1}). BallLauncher Center is at {2}", e.X, e.Y, ballStart.currentPosition.ToString()));
             if (_balls.allBalls.Count == 0)
             {
                 ThrowBalls(e.Location);
@@ -180,6 +181,8 @@ namespace VP_Project
         /// <returns>Angle between start and arrival in radians</returns>
         private float GetAngle(Point start, Point arrival)
         {
+			start = new Point(start.X + 10, start.Y + 10);
+			Console.WriteLine("Altered ballLauncher {0}", start);
             var radian = Math.Atan2((arrival.Y - start.Y), (arrival.X - start.X));
             return (float)radian;
         }
@@ -329,7 +332,7 @@ namespace VP_Project
             Pen blackPen = new Pen(black, 3);
             blackPen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
 
-            Point newPoint = new Point(ballStart.currentPosition.X + Balls.BallStart.BALL_SIZE, ballStart.currentPosition.Y + Balls.BallStart.BALL_SIZE);
+            Point newPoint = new Point(ballStart.currentPosition.X + Constants.BALL_LAUNCHER_SIZE, ballStart.currentPosition.Y + Constants.BALL_LAUNCHER_SIZE);
             g.DrawLine(blackPen, newPoint, lastMouseLocation);
         }
 

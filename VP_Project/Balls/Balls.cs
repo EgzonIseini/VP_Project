@@ -14,7 +14,7 @@ namespace VP_Project.Balls
         public int numBalls { get; set; }
         public List<Ball> allBalls { get; set; }
 		Color color;
-		public Point pointToAdd { get; set; }
+		public Point startingPoint { get; set; }
 		public float Angle { get; set; }
 		public int ballsLeft { get; set; }
         public Balls(int n, Color color, float Angle, BallStart ballStart) 
@@ -22,7 +22,8 @@ namespace VP_Project.Balls
 			//Point addBalls = new Point(ballStart.currentPosition.X + 15, ballStart.currentPosition.Y);
 			//balls.Add(new Balls.Ball(addBalls, Color.Black, (float)GetAngle(ballStart.currentPosition, e.Location) / 57.4F));
 
-			pointToAdd = new Point(ballStart.currentPosition.X + 20, ballStart.currentPosition.Y);
+			startingPoint = new Point(ballStart.currentPosition.X + Constants.BALL_LAUNCHER_SIZE, ballStart.currentPosition.Y + Constants.BALL_LAUNCHER_SIZE);
+			Console.WriteLine("pointToAdd is {0}", startingPoint.ToString());
 
 			this.Angle = Angle;
 			this.allBalls = new List<Ball>();
@@ -66,7 +67,7 @@ namespace VP_Project.Balls
 		}
 		public void AddBall()
 		{
-			allBalls.Add(new Ball(pointToAdd, color, Angle));
+			allBalls.Add(new Ball(startingPoint, color, Angle));
 			ballsLeft--;
 		}
     }

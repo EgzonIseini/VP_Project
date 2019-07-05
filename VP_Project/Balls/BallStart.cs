@@ -19,7 +19,6 @@ namespace VP_Project.Balls
 
 		// ----- Radius of the launchpads.
 		public static int Radius = (int)Constants.BALL_RADIUS;
-		public static readonly int BALL_SIZE = 10;
 
 		// ----- Static variables which define with what brush (color) the launchpads will be colored.
 		// -- Initially current is White and next is LimeGreen.
@@ -30,10 +29,10 @@ namespace VP_Project.Balls
 		public BallStart()
 		{
 			// Y - vertical position of the launchpad. Always the same.
-			int y = Constants.FORM_BOTTOM + BALL_SIZE;
+			int y = Constants.FORM_BOTTOM + Constants.BALL_LAUNCHER_SIZE;
 
 			// X - horizontal position of the launchpad. Initially is set to a random value (new game)
-			int x = Constants.RANDOM.Next(0 + BALL_SIZE, Constants.FORM_RIGHT - BALL_SIZE);
+			int x = Constants.RANDOM.Next(0 + Constants.BALL_LAUNCHER_SIZE, Constants.FORM_RIGHT - Constants.BALL_LAUNCHER_SIZE);
 
 			// Current position is assigned to the above values.
 			currentPosition = new Point(x, y);
@@ -82,7 +81,7 @@ namespace VP_Project.Balls
 			stringFormat.Alignment = StringAlignment.Center;
 			stringFormat.LineAlignment = StringAlignment.Center;
 
-			g.DrawString(ballsLeft + "", font, Brushes.Black, currentPosition.X + BALL_SIZE, currentPosition.Y + BALL_SIZE, stringFormat);
+			g.DrawString(ballsLeft + "", font, Brushes.Black, currentPosition.X + Constants.BALL_LAUNCHER_SIZE, currentPosition.Y + Constants.BALL_LAUNCHER_SIZE, stringFormat);
 		}
 	}
 }
