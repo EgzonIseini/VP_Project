@@ -167,10 +167,10 @@ namespace VP_Project.Balls
             {
                 BallDead = true;
 
-				int y = Constants.FORM_BOTTOM + (int)Constants.BALL_RADIUS;
-				int x = Center.X - (int)Constants.BALL_RADIUS;
-
-				if( BallStart.nextPosition.X == -100 ) BallStart.nextPosition = new Point(x, y);
+				int y = Constants.FORM_BOTTOM + Constants.BALL_LAUNCHER_SIZE;
+				int x = Center.X;
+				
+				if ( BallStart.nextPosition.X == -100 ) BallStart.nextPosition = new Point(x, y);
 			}
             if (nextY - r <= top)
             {
