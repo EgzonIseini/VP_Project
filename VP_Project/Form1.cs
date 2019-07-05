@@ -146,8 +146,6 @@ namespace VP_Project
                 GenerateNewGame();
             }
 
-			Powerup();
-
 			ballStart.GenerateNewPositions();
         }
 
@@ -197,6 +195,9 @@ namespace VP_Project
             ballStart = new Balls.BallStart();
             _balls = new Balls.Balls(0, Color.Black, 0, ballStart);
 
+			// Sets score to 0 and all other multipliers to 1.
+			NewGameStats();
+
 			powerups = new List<int>();
 
 			scoreMultiplierLabel.Text = "";
@@ -230,16 +231,15 @@ namespace VP_Project
             Row.ResetGame();
             rows = new List<Row>();
             rows.Add(new Row());
-            this.ballsToAdd = 1;
+
+
+			// Sets score to 0 and all multipliers to 1;
+			NewGameStats();
 
 			scoreMultiplierLabel.Text = "";
 			damageMultiplierLabel.Text = "";
 			ballMultiplierLabel.Text = "";
 			scoreLabel.Text = "Score: 0";
-
-			ResetPowerups();
-			Constants.currentScore = 0;
-			Constants.ballMultiplier = 0;
 		}
 
         /// <summary>
@@ -268,7 +268,8 @@ namespace VP_Project
                 {
                     ShotWasTaken = false;
 					ResetPowerups();
-                    MoveRowsDown();
+					Powerup();
+					MoveRowsDown();
                 }
             }
             else
@@ -392,6 +393,15 @@ namespace VP_Project
 		private void ResetPowerups()
 		{
 			Constants.scoreMultiplier = 1;
+			Constants.damageMultiplier = 1;
+		}
+
+		private void NewGameStats()
+		{
+			this.ballsToAdd = 1;
+			Constants.currentScore = 0;
+			Constants.scoreMultiplier = 1;
+			Constants.ballMultiplier = 1;
 			Constants.damageMultiplier = 1;
 		}
 

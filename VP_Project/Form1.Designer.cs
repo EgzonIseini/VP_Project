@@ -103,7 +103,6 @@
 			// ballAdder
 			// 
 			this.ballAdder.Enabled = true;
-			this.ballAdder.Interval = 200;
 			this.ballAdder.Tick += new System.EventHandler(this.ballAdder_Tick);
 			// 
 			// statusStrip1
