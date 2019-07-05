@@ -1,6 +1,8 @@
 
 # BBTAN
 
+**VP Project by Ardian Abazi, Egzon Iseini & Mladen Tasevski**
+
 ## 01. Introduction
 
 **BBTan** (FINKI) - is an attempt to recreate the widely famous and popular [BBTAN game](https://play.google.com/store/apps/details?id=com.crater.bbtan), whose popularity is especially noticeable on mobile devices. We felt that the re-implementation of this game would be an ideal project as it covers the more important aspects of the Visual Programming course, especially painting using Windows Forms.
