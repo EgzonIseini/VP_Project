@@ -3,6 +3,19 @@
 
 **VP Project by Ardian Abazi, Egzon Iseini & Mladen Tasevski**
 
+## !! Important
+ Due to the way the game-saving mechanisms were implemented and auto-saving works, the project has a serious bug that occurs when starting the game for the first time ever, it would return an exception and not run at all.
+ 
+ Game was implemented in such a way that it would auto-save any progress when closing it, and load it automatically when starting it. The save file would be located in the %appdata% folder. If this file was missing, the game wouldn't start. And the only time when that file will be missing is, if the game was never run on that computer. 
+ 
+ Reason for this is that we are calling a method, which in turn calls an object method to re-set the object. However on a fresh run, this object will always be NULL. In order to fix it, just alter line 250 of Form1.cs as such:
+ ```csharp
+ //Find the following code in line 250 of Form1.cs
+ _balls.Terminate();
+ 
+ //Include a null check before calling the method
+ if(_balls != null) _balls.Terminate();
+ ```
 ## 01. Introduction
 
 **BBTan** (FINKI) - is an attempt to recreate the widely famous and popular [BBTAN game](https://play.google.com/store/apps/details?id=com.crater.bbtan), whose popularity is especially noticeable on mobile devices. We felt that the re-implementation of this game would be an ideal project as it covers the more important aspects of the Visual Programming course, especially painting using Windows Forms.
